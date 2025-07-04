@@ -1120,7 +1120,7 @@ app.get("/calculateCareerScore", (req, res) => {
   }
 
   // Create PDF document and save it to server
-  const doc = new PDFDocument();
+  /* const doc = new PDFDocument();
   const fileName = `big5_results_${Date.now()}.pdf`;
   const filePath = path.join(__dirname, "pdfs", fileName);
 
@@ -1154,9 +1154,9 @@ app.get("/calculateCareerScore", (req, res) => {
   doc.text(neuroticismScore.desc);
 
   // Finalize the PDF
-  doc.end();
+  doc.end();*/
 
-  writeStream.on("finish", () => {
+  /*writeStream.on("finish", () => {
     // Send the response with the file path
     res.json({
       message: "PDF generated and saved successfully.",
@@ -1167,12 +1167,21 @@ app.get("/calculateCareerScore", (req, res) => {
       agreeableness: agreeablenessScore,
       neuroticism: neuroticismScore,
     });
+  });*/
+
+  res.json({
+    message: "PDF generated and saved successfully.",
+    openness: opennessScore,
+    conscientiousness: conscientiousnessScore,
+    extraversion: extraversionScore,
+    agreeableness: agreeablenessScore,
+    neuroticism: neuroticismScore,
   });
 
-  writeStream.on("error", (err) => {
+  /*writeStream.on("error", (err) => {
     console.log(err);
     res.status(500).json({ error: "Error generating PDF" });
-  });
+  });*/
 });
 
 app.get("/calculateScore", (req, res) => {
@@ -1373,7 +1382,7 @@ app.get("/calculateScore", (req, res) => {
   }
 
   // Create PDF document and save it to server
-  const doc = new PDFDocument();
+  /*const doc = new PDFDocument();
   const fileName = `big5_results_${Date.now()}.pdf`;
   const filePath = path.join(__dirname, "pdfs", fileName);
 
@@ -1420,12 +1429,21 @@ app.get("/calculateScore", (req, res) => {
       agreeableness: agreeablenessScore,
       neuroticism: neuroticismScore,
     });
+  });*/
+
+  res.json({
+    message: "PDF generated and saved successfully.",
+    openness: opennessScore,
+    conscientiousness: conscientiousnessScore,
+    extraversion: extraversionScore,
+    agreeableness: agreeablenessScore,
+    neuroticism: neuroticismScore,
   });
 
-  writeStream.on("error", (err) => {
+  /* writeStream.on("error", (err) => {
     console.log(err);
     res.status(500).json({ error: "Error generating PDF" });
-  });
+  });*/
 });
 
 app.post("/sendResultsAsEmail", (req, res) => {
