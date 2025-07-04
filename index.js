@@ -1,7 +1,6 @@
 import express from "express";
 import cors from "cors";
 import env from "dotenv";
-import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import nodemailer from "nodemailer";
 import PDFDocument from "pdfkit";
@@ -10,12 +9,9 @@ import path from "path";
 import { fileURLToPath } from "url";
 import bcrypt from "bcrypt";
 import mysql from "mysql";
-import session from "express-session";
 import jwt from "jsonwebtoken";
-import crypto from "crypto";
 import Stripe from "stripe";
-
-import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
 
 export const Questions = [
   {
@@ -36,7 +32,6 @@ export const Questions = [
     trait: "Neuroticism",
     facet: "positive",
   },
-
   {
     id: 4,
     question: "Is ingenious, a deep thinker",
@@ -45,7 +40,7 @@ export const Questions = [
   },
   {
     id: 5,
-    question: "Generates a lot of enthusiasm ",
+    question: "Generates a lot of enthusiasm",
     trait: "Extraversion",
     facet: "positive",
   },
@@ -63,14 +58,13 @@ export const Questions = [
   },
   {
     id: 8,
-    question: "Worries a lot ",
+    question: "Worries a lot",
     trait: "Neuroticism",
     facet: "positive",
   },
-
   {
     id: 9,
-    question: "Has an active imagination ",
+    question: "Has an active imagination",
     trait: "Openness",
     facet: "positive",
   },
@@ -94,7 +88,7 @@ export const Questions = [
   },
   {
     id: 13,
-    question: "Is inventive ",
+    question: "Is inventive",
     trait: "Openness",
     facet: "positive",
   },
@@ -106,13 +100,13 @@ export const Questions = [
   },
   {
     id: 15,
-    question: "Can be cold and aloof ",
+    question: "Can be cold and aloof",
     trait: "Agreeableness",
     facet: "negative",
   },
   {
     id: 16,
-    question: "Perseveres until the task is finished ",
+    question: "Perseveres until the task is finished",
     trait: "Conscientiousness",
     facet: "positive",
   },
@@ -130,14 +124,13 @@ export const Questions = [
   },
   {
     id: 19,
-    question: "Is sometimes shy, inhibited ",
+    question: "Is sometimes shy, inhibited",
     trait: "Extraversion",
     facet: "negative",
   },
-
   {
     id: 20,
-    question: "Is considerate and kind to almost everyone ",
+    question: "Is considerate and kind to almost everyone",
     trait: "Agreeableness",
     facet: "positive",
   },
@@ -149,7 +142,7 @@ export const Questions = [
   },
   {
     id: 22,
-    question: "Prefers work that is routine ",
+    question: "Prefers work that is routine",
     trait: "Openness",
     facet: "negative",
   },
@@ -161,13 +154,13 @@ export const Questions = [
   },
   {
     id: 24,
-    question: "Is sometimes rude to others ",
+    question: "Is sometimes rude to others",
     trait: "Agreeableness",
     facet: "negative",
   },
   {
     id: 25,
-    question: "Makes plans and follows through with them ",
+    question: "Makes plans and follows through with them",
     trait: "Conscientiousness",
     facet: "positive",
   },
@@ -185,29 +178,28 @@ export const Questions = [
   },
   {
     id: 28,
-    question: "Values artistic, aesthetic experiences ",
+    question: "Values artistic, aesthetic experiences",
     trait: "Openness",
     facet: "positive",
   },
   {
     id: 29,
-    question: "Is sometimes shy, inhibited ",
+    question: "Is sometimes shy, inhibited",
     trait: "Extraversion",
     facet: "negative",
   },
   {
     id: 30,
-    question: "Is considerate and kind to almost everyone ",
+    question: "Is considerate and kind to almost everyone",
     trait: "Agreeableness",
     facet: "positive",
   },
   {
     id: 31,
-    question: "Does things efficiently ",
+    question: "Does things efficiently",
     trait: "Conscientiousness",
     facet: "positive",
   },
-
   {
     id: 32,
     question: "Is talkative",
@@ -216,13 +208,13 @@ export const Questions = [
   },
   {
     id: 33,
-    question: "Tends to find fault with others ",
+    question: "Tends to find fault with others",
     trait: "Agreeableness",
     facet: "negative",
   },
   {
     id: 34,
-    question: "Does a thorough job ",
+    question: "Does a thorough job",
     trait: "Conscientiousness",
     facet: "positive",
   },
@@ -234,50 +226,57 @@ export const Questions = [
   },
   {
     id: 36,
-    question: "Is original, comes up with new ideas ",
+    question: "Is original, comes up with new ideas",
     trait: "Openness",
     facet: "positive",
   },
   {
     id: 37,
-    question: "Is reserved ",
+    question: "Is reserved",
     trait: "Extraversion",
     facet: "positive",
   },
   {
     id: 38,
-    question: "Is reserved ",
-    trait: "Extraversion",
-    facet: "positive",
-  },
-  {
-    id: 39,
-    question: "Is helpful and unselfish with others ",
+    question: "Is helpful and unselfish with others",
     trait: "Agreeableness",
     facet: "positive",
   },
   {
-    id: 40,
-    question: "Can be somewhat careless ",
+    id: 39,
+    question: "Can be somewhat careless",
     trait: "Conscientiousness",
     facet: "negative",
   },
   {
-    id: 41,
-    question: "Is relaxed, handles stress well  ",
+    id: 40,
+    question: "Is relaxed, handles stress well",
     trait: "Neuroticism",
     facet: "negative",
   },
   {
-    id: 42,
+    id: 41,
     question: "Is curious about many different things",
     trait: "Openness",
     facet: "positive",
   },
   {
-    id: 43,
-    question: "Is full of energy ",
+    id: 42,
+    question: "Is full of energy",
     trait: "Extraversion",
+    facet: "positive",
+  },
+  // New Questions Added:
+  {
+    id: 43,
+    question: "Has a strong sense of responsibility",
+    trait: "Conscientiousness",
+    facet: "positive",
+  },
+  {
+    id: 44,
+    question: "Has a high level of self-discipline",
+    trait: "Conscientiousness",
     facet: "positive",
   },
 ];
@@ -531,6 +530,12 @@ export const CareerQuestions = [
     trait: "Extraversion",
     facet: "positive",
   },
+  {
+    id: 44,
+    question: "I enjoy setting long-term goals and planning for the future",
+    trait: "Conscientiousness",
+    facet: "positive",
+  },
 ];
 
 const __filename = fileURLToPath(import.meta.url);
@@ -545,12 +550,14 @@ if (!fs.existsSync(pdfFolder)) {
 
 // Combine the folder path and the file name to create the full path
 //const pdfPath = path.join(pdfFolder, pdfName);
-console.log(__dirname);
+
 const app = express();
 
 const port = 3000;
 
 env.config();
+
+const jwtSecretKey = process.env.JWT_SECRET_KEY;
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const saltRounds = 10;
 const connection = mysql.createConnection({
@@ -559,21 +566,55 @@ const connection = mysql.createConnection({
   password: process.env.MYSQL_PASSWORD,
   database: process.env.MYSQL_DATABASE,
 });
-/*app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: true,
+app.use(
+  cors({
+    origin: "http://localhost:5173", // your frontend URL
+    credentials: true, // allow cookies and credentials
   })
-);*/
-
-//app.use(passport.initialize());
-//app.use(passport.session());
-
-app.use(cors());
+);
 app.use(express.json());
+app.use(cookieParser());
+const authMiddleware = (req, res, next) => {
+  const token = req.cookies.authToken;
+
+  jwt.verify(token, jwtSecretKey, (err, user) => {
+    if (err) {
+      if (err.name === "TokenExpiredError") {
+        return res
+          .status(401)
+          .json({ message: "Session expired. Please log in again." }); // Unauthorized (token expired)
+      }
+      return res.status(403).json({ message: "Invalid Token" }); // Forbidden (invalid token)
+    }
+    const userId = user.id;
+    connection.query(
+      "SELECT * FROM tbl_users WHERE id = ?",
+      [userId],
+      (err, result) => {
+        if (err) {
+          console.error("Error fetching user:", err);
+          return res.status(500).send("Internal Server Error");
+        }
+        if (result.length === 0) {
+          return res.status(404).send("User not found");
+        }
+        req.user = result[0]; // Get the user object from the result
+        next();
+      }
+    );
+    //req.user = user; // Attach user information to the request
+    // Proceed to the next middleware or route handler
+  });
+};
+
+app.get("/protected", authMiddleware, (req, res) => {
+  res.json({ message: "This is a protected route", user: req.user });
+});
+
 app.get("/", (req, res) => {
   res.send("Hello World");
+  console.log("Server is running on port", port);
+  console.log("Dirname", __dirname);
 });
 
 app.post("/register", async (req, res) => {
@@ -623,17 +664,27 @@ app.post("/login", async (req, res) => {
               console.error("Error comparing passwords:", err);
             } else {
               if (result) {
-                const jwtSecretKey = crypto.randomBytes(32).toString("hex");
                 console.log(jwtSecretKey);
                 const token = jwt.sign(
-                  { id: user.id, email: user.email },
+                  {
+                    id: user.id,
+                    name: user.name,
+                    email: user.email,
+                    is_paid: user.is_paid,
+                  },
                   jwtSecretKey,
-                  { expiresIn: "1h" }
+                  { expiresIn: "2h" }
                 );
-                console.log(user);
-                res.json({ result: user, authToken: token });
+                res.cookie("authToken", token, {
+                  httpOnly: true,
+                  secure: process.env.NODE_ENV === "production", // ✅ only true in prod
+                  sameSite:
+                    process.env.NODE_ENV === "production" ? "None" : "Lax",
+                  maxAge: 3600000,
+                });
+                res.json({ result: user });
               } else {
-                res.send("Incorrect Password");
+                return res.send("Incorrect Password");
               }
             }
           });
@@ -645,6 +696,16 @@ app.post("/login", async (req, res) => {
   } catch (err) {
     console.log(err);
   }
+});
+
+app.post("/logout", async (req, res) => {
+  res.clearCookie("authToken", {
+    httpOnly: true, // Ensures cookie is not accessible via JavaScript
+    secure: false,
+    path: "/", // Specifies the path for which cookie should be cleared
+  });
+
+  res.status(200).json({ success: "Successfully loggedout" });
 });
 
 app.post("/forgotPassword", async (req, res) => {
@@ -668,8 +729,9 @@ app.post("/forgotPassword", async (req, res) => {
   }
 });
 
-app.post("/saveResults", async (req, res) => {
-  const { userId, questionId, testResults, testType } = req.body;
+app.post("/saveResults", authMiddleware, async (req, res) => {
+  const userId = req.user.id;
+  const { questionId, testResults, testType } = req.body;
   console.log(req.body);
   await connection.query(
     "INSERT INTO tbl_testresults(user_id,question_id, test_result, test_type) VALUES(?, ?, ?,?)",
@@ -678,33 +740,59 @@ app.post("/saveResults", async (req, res) => {
   res.send("Added successfully");
 });
 
-app.get("/getTestResults", async (req, res) => {
+app.post("/getTestResults", authMiddleware, async (req, res) => {
   try {
-    const { userId, testType } = req.query;
+    const userId = req.user.id;
+    const isPaid = req.user.is_paid;
+    const { testType } = req.body;
     console.log(userId);
     console.log(testType);
     console.log("Received userId:", userId);
-    await connection.query(
-      "SELECT * FROM tbl_testresults WHERE user_id = ? and test_type=?",
-      [Number(userId), testType],
-      (err, result) => {
-        if (result.length > 0) {
-          const row = result[0];
+    if (isPaid === 1 && testType === "Career Test") {
+      await connection.query(
+        "SELECT * FROM tbl_testresults WHERE user_id = ? and test_type=?",
+        [userId, testType],
+        (err, result) => {
+          if (result.length > 0) {
+            const row = result[0];
 
-          if (err) {
-            console.error("Error comparing passwords:", err);
-          } else {
-            if (result) {
-              res.json({ result: row });
+            if (err) {
+              console.error("Error comparing passwords:", err);
             } else {
-              res.send("Error");
+              if (result) {
+                res.json({ result: row });
+              } else {
+                res.send("Error");
+              }
             }
+          } else {
+            res.send("User not found");
           }
-        } else {
-          res.send("User not found");
         }
-      }
-    );
+      );
+    } else {
+      await connection.query(
+        "SELECT * FROM tbl_testresults WHERE user_id = ? and test_type=?",
+        [userId, testType],
+        (err, result) => {
+          if (result.length > 0) {
+            const row = result[0];
+
+            if (err) {
+              console.error("Error comparing passwords:", err);
+            } else {
+              if (result) {
+                res.json({ result: row });
+              } else {
+                res.send("Error");
+              }
+            }
+          } else {
+            res.send("User not found");
+          }
+        }
+      );
+    }
 
     //res.json({ result: result });
   } catch (error) {
@@ -855,71 +943,173 @@ app.get("/calculateCareerScore", (req, res) => {
   function generateDescription(percentage, trait) {
     let description = "";
     let careerchoice = "";
+    let templatePath = "";
     switch (trait) {
       case "openness":
-        if (percentage > 80) {
-          description = `A score above 80 signifies a strong preference for intellectual exploration, creative thinking, and a willingness to embrace novel ideas and unconventional experiences. You are drawn to abstract concepts, aesthetics, and new challenges, and likely thrive in environments that reward curiosity and innovation.You may excel in careers that involve creativity, innovation, and intellectual exploration, such as UX/UI design, research, architecture, or roles in the arts and creative consulting.`;
-        } else if (percentage > 60) {
-          description = `A score around 60 indicates moderate openness. You enjoy new experiences and ideas but appreciate structure and practicality. You’re open-minded but may lean toward realism, preferring ideas that are both imaginative and applicable.You may excel in careers like marketing, education, product management, or business analysis, where a balance of creativity and practicality is valued.`;
-        } else if (percentage > 40) {
-          description = `A score around 40 suggests a preference for familiar ideas and methods. You may be pragmatic, valuing tested approaches over novelty. While capable of adapting, you feel most comfortable with clear, concrete systems.You may excel in more structured and familiar environments such as project coordination, operations management, or financial advising, where tested methods are preferred.`;
-        } else if (percentage > 20) {
-          description = `A score around 20 signifies a strong preference for routine, tradition, and practical outcomes. Abstract ideas or creative risks are less appealing. You prefer clarity, predictability, and step-by-step processes.You may excel in careers requiring stability and routine, like administration, law enforcement, or supply chain management.`;
+        if (percentage >= 80) {
+          templatePath = path.join(
+            __dirname,
+            "career-descriptions/openness-80.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
+          //description = `A score above 80 signifies a strong preference for intellectual exploration, creative thinking, and a willingness to embrace novel ideas and unconventional experiences. You are drawn to abstract concepts, aesthetics, and new challenges, and likely thrive in environments that reward curiosity and innovation.You may excel in careers that involve creativity, innovation, and intellectual exploration, such as UX/UI design, research, architecture, or roles in the arts and creative consulting.`;
+        } else if (percentage >= 60) {
+          templatePath = path.join(
+            __dirname,
+            "career-descriptions/openness-60.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
+        } else if (percentage >= 40) {
+          templatePath = path.join(
+            __dirname,
+            "career-descriptions/openness-40.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
+        } else if (percentage >= 20) {
+          templatePath = path.join(
+            __dirname,
+            "career-descriptions/openness-20.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
         } else {
-          description = `A score below 20 reflects very low openness. You strongly prefer facts over theories, stability over experimentation, and routine over exploration. You likely excel in rule-based, highly structured environments.You may excel in highly rule-bound and fact-focused careers such as auditing, banking, or compliance, where tradition and accuracy are key.`;
+          templatePath = path.join(
+            __dirname,
+            "career-descriptions/openness-10.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
         }
 
         break;
       case "conscientiousness":
-        if (percentage > 80) {
-          description = `A score above 80 indicates you are highly organized, disciplined, and goal-oriented. You thrive in structured environments, plan meticulously, and are extremely reliable. You prefer clear goals, deadlines, and routines, and take pride in achieving high standards.You may excel in highly structured and demanding careers such as surgery, law, engineering, or finance, which require strong organization and reliability.`;
-        } else if (percentage > 60) {
-          description = `A score around 60 reflects a healthy balance between structure and flexibility. You’re dependable and efficient but not rigid. You plan ahead, stay focused, and can adapt when necessary. Ideal for roles that need responsibility without excessive rigidity.You may excel in careers like project management, marketing, or healthcare administration, where dependability and flexibility are both important.`;
-        } else if (percentage > 40) {
-          description = `A score around 40 suggests a casual, flexible approach to work. You’re spontaneous and adaptable, but may struggle with long-term planning or organization. You work best in dynamic, fast-changing environments without strict routines.You may excel in dynamic and flexible roles such as creative design, journalism, or event planning, which allow for spontaneity and adaptability.`;
-        } else if (percentage > 20) {
-          description = `With scores between 20 and 40, individuals may be more spontaneous and less concerned with order and structure. They may find it difficult to plan ahead or stay organized but often thrive in more unstructured environments.You may excel in informal or freelance careers like music, content creation, or gig work, where routine and strict schedules are less important.`;
+        if (percentage >= 80) {
+          templatePath = path.join(
+            __dirname,
+            "career-descriptions/conscientiousness-80.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
+        } else if (percentage >= 60) {
+          templatePath = path.join(
+            __dirname,
+            "career-descriptions/conscientiousness-60.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
+        } else if (percentage >= 40) {
+          templatePath = path.join(
+            __dirname,
+            "career-descriptions/conscientiousness-40.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
+        } else if (percentage >= 20) {
+          templatePath = path.join(
+            __dirname,
+            "career-descriptions/conscientiousness-20.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
         } else {
-          description = `A score below 20 reflects very low conscientiousness. You resist external control, rules, or structure and work best when free from deadlines. Routine and discipline may feel stifling.You may excel in highly independent and unstructured creative roles such as visual arts or filmmaking.`;
+          templatePath = path.join(
+            __dirname,
+            "career-descriptions/conscientiousness-10.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
         }
         break;
       case "extraversion":
-        if (percentage > 80) {
-          description = `A score above 80 indicates you're highly outgoing, energetic, and socially confident. You thrive in fast-paced, high-energy environments with lots of interaction and stimulation. You draw energy from others and enjoy being in the spotlight.You may excel in high-energy, social careers like sales, public relations, acting, or politics, which require outgoing and assertive interaction.`;
-        } else if (percentage > 60) {
-          description = `A score around 60 means you’re socially comfortable but not dependent on constant interaction. You enjoy people and conversation but also value time alone. You balance team engagement with focused work well.You may excel in socially balanced careers such as teaching, consulting, or human resources, where interaction and independent work are both valued.`;
-        } else if (percentage > 40) {
-          description = `A score around 40 suggests you lean toward introversion. You may enjoy social contact in small doses, but prefer working independently or in quiet environments. You're thoughtful, reflective, and tend to listen more than speak.You may excel in quieter, more introspective roles such as software development, research, or technical writing.`;
-        } else if (percentage > 20) {
-          description = `A score around 20 reflects strong introversion. You prefer quiet, solitary work and avoid high social demands. Large groups and noisy environments drain you. You excel in deep, focused work.You may excel in solitary and focused careers like library science, data analysis, or lab work, where limited social interaction is preferred.`;
+        if (percentage >= 80) {
+          templatePath = path.join(
+            __dirname,
+            "career-descriptions/extraversion-80.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
+        } else if (percentage >= 60) {
+          templatePath = path.join(
+            __dirname,
+            "career-descriptions/extraversion-60.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
+        } else if (percentage >= 40) {
+          templatePath = path.join(
+            __dirname,
+            "career-descriptions/openness-40.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
+        } else if (percentage >= 20) {
+          templatePath = path.join(
+            __dirname,
+            "career-descriptions/extraversion-20.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
         } else {
-          description = `A score below 20 shows extreme introversion. You prefer working entirely alone, often in slow-paced, highly independent settings. Minimal interaction is ideal.You may excel in very independent, low-interaction careers such as night security, forest ranger, or solo artistic work.`;
+          templatePath = path.join(
+            __dirname,
+            "career-descriptions/extraversion-10.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
         }
         break;
       case "agreeableness":
-        if (percentage > 80) {
-          description = `A score above 80 means you are deeply compassionate, empathetic, and cooperative. You’re highly attuned to others’ needs, avoid conflict, and are motivated by helping people and promoting harmony.You may excel in careers centered on helping others, like nursing, social work, teaching, or counseling.`;
-        } else if (percentage > 60) {
-          description = `A score around 60 suggests you are generally warm and friendly, but also able to be assertive when needed. You work well with others and are trusted, but you can set boundaries and make hard decisions when required.You may excel in roles that balance cooperation with assertiveness, such as customer service management, team leadership, or corporate training.`;
-        } else if (percentage > 40) {
-          description = `A score around 40 suggests a pragmatic and assertive approach to relationships. You value fairness over niceness and may challenge ideas directly. You’re more task-focused than people-pleasing.You may excel in pragmatic, task-focused careers like business consulting, logistics, or software engineering.`;
-        } else if (percentage > 20) {
-          description = `A score around 20 reflects low agreeableness. You are highly independent, skeptical, and assertive. You question authority and dislike being told what to do. You thrive in debate-heavy or competitive environments.You may excel in competitive, independent roles like law, entrepreneurship, trading, or intelligence analysis.`;
+        if (percentage >= 80) {
+          templatePath = path.join(
+            __dirname,
+            "career-descriptions/agreeableness-80.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
+        } else if (percentage >= 60) {
+          templatePath = path.join(
+            __dirname,
+            "career-descriptions/agreeableness-60.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
+        } else if (percentage >= 40) {
+          templatePath = path.join(
+            __dirname,
+            "career-descriptions/agreeableness-40.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
+        } else if (percentage >= 20) {
+          templatePath = path.join(
+            __dirname,
+            "career-descriptions/agreeableness-20.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
         } else {
-          description = `A score below 20 suggests very low agreeableness. You are blunt, critical, and highly autonomous. You prefer facts over feelings and can handle conflict with ease. You’re effective in roles requiring hard truths and strategic decisions.You may excel in highly analytical and strategic careers requiring blunt honesty and independence, like litigation, security consulting, or investigative journalism.`;
+          templatePath = path.join(
+            __dirname,
+            "career-descriptions/agreeableness-10.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
         }
         break;
       case "neuroticism":
-        if (percentage > 80) {
-          description = ` A score above 80 suggests high emotional sensitivity. You may struggle with stress, self-doubt, or mood swings. You likely do best in supportive, low-pressure environments that allow emotional expression.You may excel in careers that allow emotional expression and sensitivity, such as art, counseling, or animal care.`;
-        } else if (percentage > 60) {
-          description = `A score around 60 indicates moderate emotional reactivity. You may experience stress and anxiety but can usually manage it. You benefit from structured, empathetic environments.You may excel in careers that require managing some emotional stress with support, like graphic design, customer service, or teaching.`;
-        } else if (percentage > 40) {
-          description = `A score around 40 reflects emotional balance. You’re calm under normal stress but may feel pressure in extreme cases. You’re stable and realistic, with a healthy level of sensitivity.You may excel in balanced roles requiring calmness and focus, such as engineering, finance, or nursing.`;
-        } else if (percentage > 20) {
-          description = `A score around 20 means you're emotionally stable and resilient. You handle stress calmly and recover quickly from setbacks. You work well in challenging or unpredictable environments.You may excel in high-pressure careers like emergency medicine, law, firefighting, or piloting.`;
+        if (percentage >= 80) {
+          templatePath = path.join(
+            __dirname,
+            "career-descriptions/neuroticism-80.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
+        } else if (percentage >= 60) {
+          templatePath = path.join(
+            __dirname,
+            "career-descriptions/neuroticism-60.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
+        } else if (percentage >= 40) {
+          templatePath = path.join(
+            __dirname,
+            "career-descriptions/neuroticism-40.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
+        } else if (percentage >= 20) {
+          templatePath = path.join(
+            __dirname,
+            "career-descriptions/neuroticism-20.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
         } else {
-          description = `A score below 20 reflects exceptional emotional stability. You are nearly unshakable in the face of chaos, pressure, or crisis. You stay focused, rational, and calm when others panic.You may excel in extreme-stress or crisis leadership roles like trauma surgery, military leadership, or crisis negotiation.`;
+          templatePath = path.join(
+            __dirname,
+            "career-descriptions/neuroticism-10.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
         }
         break;
       default:
@@ -1111,69 +1301,69 @@ app.get("/calculateScore", (req, res) => {
     let description = "";
     switch (trait) {
       case "openness":
-        if (percentage > 80) {
-          description = `A score greater than 80 indicates a highly open individual who is exceptionally creative, imaginative, and curious, often drawn to abstract concepts, art, and unconventional ideas.`;
-        } else if (percentage > 60) {
-          description = `Those scoring above 60 still exhibit a strong inclination toward learning and novelty but maintain a balance between practicality and curiosity.`;
-        } else if (percentage > 40) {
-          description = `Individuals with a score above 40 tend to be moderately open, appreciating new experiences while also valuing familiarity and structure.`;
-        } else if (percentage > 20) {
-          description = `If the score falls above 20 but below 40, the person may prefer routine and practicality, showing limited interest in abstract thinking or change.`;
+        if (percentage >= 80) {
+          description = `You have an exceptionally high level of openness, which means your mind is naturally expansive, imaginative, and eager to explore new and unconventional ideas. You thrive on creativity, abstract thinking, and intellectual discovery, often questioning norms and seeking out novel experiences. You’re deeply introspective and enjoy contemplating complex concepts, emotions, and possibilities. Your imagination is vivid, and you’re likely drawn to beauty, symbolism, and depth in everything from art and music to ideas and personal experiences. People with this level of openness often feel energized by change, diversity, and complexity, and they tend to embrace ambiguity rather than shy away from it. You value authenticity, emotional richness, and personal growth, often seeing the world not just as it is, but as it could be.`;
+        } else if (percentage >= 60) {
+          description = `You have a moderately high level of openness, which means you’re naturally curious, imaginative, and open to exploring new ideas and perspectives. You enjoy thinking creatively and often find yourself reflecting on abstract concepts or possibilities beyond the surface. While you're not extreme in your preferences, you likely appreciate art, music, literature, or philosophical thought, and you value meaningful experiences that challenge your understanding of the world. You’re receptive to change and tend to enjoy variety in life, whether through travel, new hobbies, or diverse conversations. Your open mindset allows you to see connections others might miss, and you're often drawn to exploring different viewpoints. At the same time, you maintain enough grounding to evaluate new ideas thoughtfully rather than impulsively.`;
+        } else if (percentage >= 40) {
+          description = `IYou show a balanced level of openness, indicating that you value both tradition and new ideas in equal measure. You're practical and realistic, often preferring tried-and-true methods over untested approaches. At the same time, you're not completely closed off to novelty—you’re open to change and new experiences if they seem reasonable or beneficial. You may enjoy learning new things occasionally but might not actively seek out abstract theories or unconventional perspectives. Your thinking tends to be grounded, and you likely prefer facts and tangible outcomes over speculation or fantasy. This middle-ground approach helps you navigate both the familiar and the unfamiliar with a sense of measured curiosity and thoughtful consideration.`;
+        } else if (percentage >= 20) {
+          description = `You have a relatively low level of openness, which means you tend to be practical, conventional, and more comfortable with familiar routines and well-established ideas. You likely prefer structure, predictability, and concrete information over abstract or theoretical thinking. Change may feel unsettling rather than exciting, and you might approach new experiences with caution or skepticism. Your thinking is grounded in real-world logic and facts, and you value consistency and tradition. Rather than seeking novelty, you often find satisfaction in stability and clear expectations. While you may not be drawn to imaginative or artistic pursuits, your straightforward approach helps you stay focused, dependable, and clear-headed in everyday life.`;
         } else {
-          description = `A score below 20 signifies a strong preference for stability and tradition, with a reluctance to embrace new ideas or unconventional experiences, favoring the familiar and concrete over novelty and abstraction.`;
+          description = `You have a very low level of openness, which suggests a strong preference for familiarity, structure, and traditional ways of thinking. You likely value clear rules, routine, and practical approaches over novelty or abstract ideas. Imagination, fantasy, and unconventional concepts may hold little appeal for you, as you tend to trust proven methods and prefer sticking to what you know works. You might be more skeptical of change and less inclined to experiment or take intellectual or emotional risks. Your worldview is typically grounded, realistic, and focused on the tangible and immediate. While this may mean you're less drawn to creative or philosophical thinking, it also reflects a steady, no-nonsense mindset that prioritizes clarity, dependability, and straightforward decision-making.`;
         }
 
         break;
       case "conscientiousness":
-        if (percentage > 80) {
-          description = `A score greater than 80 indicates a highly conscientious individual who is organized, responsible, and efficient. They excel at managing tasks, keeping track of details, and planning ahead. They are disciplined, dependable, and goal-oriented, often striving for perfection in everything they do.`;
-        } else if (percentage > 60) {
-          description = `Individuals scoring above 60 are still highly organized and responsible, with a strong work ethic and attention to detail. While they may not always be perfectionists, they are typically reliable and committed to their goals.`;
-        } else if (percentage > 40) {
-          description = `A score above 40 indicates a moderate level of conscientiousness. These individuals are generally dependable but may struggle with organization and following through on every task. They are more flexible and spontaneous in their approach.`;
-        } else if (percentage > 20) {
-          description = `With scores between 20 and 40, individuals may be more spontaneous and less concerned with order and structure. They may find it difficult to plan ahead or stay organized but often thrive in more unstructured environments.`;
+        if (percentage >= 80) {
+          description = `You have an exceptionally high level of conscientiousness, which means you are highly organized, reliable, and diligent in everything you do. You thrive on structure, planning, and efficiency, and you are motivated to meet your goals with precision and dedication. Your attention to detail is exceptional, and you are often seen as someone who can be trusted to follow through on commitments and responsibilities. You likely have strong self-discipline, and you are careful in making decisions, weighing all possible outcomes to ensure that you make the right choice. This level of conscientiousness also means you tend to be very punctual, focused, and driven, often setting high standards for yourself and striving to meet them. While you are highly dependable, you may also be more cautious or risk-averse, preferring to stick to well-established methods rather than taking chances.`;
+        } else if (percentage >= 60) {
+          description = `You have a moderately high level of conscientiousness, which means you are generally organized, responsible, and goal-oriented, but you also allow yourself some flexibility. You take your responsibilities seriously and strive to meet your commitments, but you may not feel the need to be excessively perfectionistic or overly rigid. While you tend to approach tasks with thoughtfulness and care, you're also able to adapt when things don't go according to plan. You balance diligence and practicality with a sense of ease, making you reliable without being overly controlling. You likely value structure and routine, but you also recognize the importance of spontaneity and creativity in certain situations. Your ability to stay focused and organized helps you get things done, but you're not overly consumed by details, allowing you to maintain a healthy sense of work-life balance.`;
+        } else if (percentage >= 40) {
+          description = `You have a balanced level of conscientiousness, meaning you're generally responsible but also enjoy some flexibility in your approach to tasks and life. While you take care of your obligations and try to be reliable, you’re not overly concerned with perfection or strict organization. You prefer a practical approach to things, but you might not always stick to rigid plans or follow every detail to the letter. You can be dependable, but you also recognize the importance of adaptability and may not always feel the need to be meticulous. This middle-ground approach allows you to stay on track without becoming overwhelmed by structure, and you can find a balance between being organized and allowing room for spontaneity. You tend to be efficient, but you’re also comfortable letting things unfold naturally when appropriate.`;
+        } else if (percentage >= 20) {
+          description = `You have a relatively low level of conscientiousness, which means you may be more spontaneous and flexible in your approach to life, preferring to go with the flow rather than adhering to strict plans or routines. You may find it difficult to stick to a rigid schedule or focus on small details, and you’re likely to prioritize immediate enjoyment over long-term goals or obligations. While you can still be reliable when needed, you may not always be as meticulous or organized as others, and you might struggle with tasks that require a high level of discipline or careful planning. Your approach to life is more laid-back, and you tend to value freedom and flexibility over structure and control. This can make you more adaptable, but at times, it might also lead to unfinished projects or a tendency to procrastinate.`;
         } else {
-          description = `A score below 20 reflects a tendency towards disorganization and lack of follow-through. These individuals are often more relaxed about their responsibilities, may procrastinate, and are less likely to focus on long-term goals. They may prefer flexibility over structure.`;
+          description = `You have a very low level of conscientiousness, which suggests a more carefree, spontaneous approach to life. You may find it challenging to maintain organization or structure in your daily routine, and you likely prefer to act on impulse rather than follow through on long-term plans. Details, deadlines, and careful planning may not be your priority, and you might prefer to live in the moment rather than worrying about future obligations or responsibilities. While this can make you flexible and adaptable, it might also lead to difficulties in staying on track or completing tasks that require sustained effort or attention. You may not always be the most reliable in terms of commitment, but your carefree nature allows you to take life as it comes without becoming bogged down by overthinking or excessive planning.`;
         }
         break;
       case "extraversion":
-        if (percentage > 80) {
-          description = `A score greater than 80 indicates a highly extroverted individual who is outgoing, energetic, and thrives in social settings. They are talkative, enjoy being the center of attention, and seek excitement and stimulation in their environment. Extraverts often feel energized when interacting with others and prefer lively, dynamic situations.`;
-        } else if (percentage > 60) {
-          description = `Individuals scoring above 60 are still social and energetic, but may occasionally enjoy time alone to recharge. They tend to engage in social activities and are comfortable in group settings but do not always require constant interaction to feel fulfilled.`;
-        } else if (percentage > 40) {
-          description = `A score above 40 reflects a more balanced approach to social interaction. These individuals are neither excessively introverted nor extroverted and enjoy socializing in moderation. They may sometimes prefer quieter, more intimate settings but are capable of engaging in larger social events when needed.`;
-        } else if (percentage > 20) {
-          description = `With a score between 20 and 40, individuals may prefer solitude and quiet environments. They are less likely to seek out social situations and may feel drained by prolonged social interaction. They are more introverted and comfortable with smaller, close-knit groups.`;
+        if (percentage >= 80) {
+          description = `You have an exceptionally high level of extraversion, which means you are outgoing, energetic, and thrive in social situations. You likely find joy in being around people, engaging in lively conversations, and participating in group activities. Your enthusiasm and positive energy can be contagious, and you often seek out new social experiences and opportunities to connect with others. You’re not shy about expressing yourself, and you're comfortable being the center of attention. Your energetic and adventurous nature makes you enjoy new challenges and experiences, and you're often seen as an optimist with a zest for life. You may find it difficult to stay quiet or be alone for extended periods, as social interaction fuels your energy and happiness. People with this level of extraversion tend to be confident, talkative, and easily able to build connections with a wide variety of people.`;
+        } else if (percentage >= 60) {
+          description = `You have a moderately high level of extraversion, which means you enjoy socializing and being around others, but you also value some quiet time to recharge. You tend to be outgoing, enthusiastic, and comfortable in social settings, often feeling energized by interacting with people. While you enjoy participating in group activities and can easily strike up conversations, you don’t always feel the need to be the center of attention. You can balance your social life with moments of solitude, allowing yourself to rest and reflect when needed. Your enthusiasm and positive attitude make you approachable, and you likely feel most at ease in familiar social situations, though you’re also open to meeting new people and exploring new experiences. Your extraverted nature allows you to build connections with ease, but you're equally comfortable with introspective moments.`;
+        } else if (percentage >= 40) {
+          description = `You have a balanced level of extraversion, meaning you enjoy socializing but also appreciate your time alone. You’re comfortable in social settings and can engage in conversations, but you’re not necessarily the life of the party. You might enjoy social interactions in smaller groups or one-on-one settings rather than large, lively gatherings. While you may not seek out constant social stimulation, you do enjoy connecting with others when the situation calls for it. You tend to be more reserved compared to highly extraverted individuals, but you're still warm, approachable, and friendly. You strike a healthy balance between being outgoing and valuing personal space, often choosing to recharge quietly after social events. Your social energy is adaptable, allowing you to fit into various situations without feeling overwhelmed or drained.`;
+        } else if (percentage >= 20) {
+          description = `You have a relatively low level of extraversion, which means you tend to be more reserved and introspective. While you may enjoy social interactions occasionally, you generally prefer solitude or spending time in smaller, more intimate settings rather than large, crowded social gatherings. You might feel drained after extended socializing and need time alone to recharge. You may not actively seek out attention or be eager to engage in conversations with strangers, but when you do interact, you are thoughtful and considerate. Your energy is more focused inward, and you tend to enjoy activities that allow for quiet reflection or deep thought. While you can be social when necessary, you typically feel more comfortable in environments where you can be yourself without feeling the pressure to be outgoing or constantly engaged with others.`;
         } else {
-          description = `A score below 20 reflects a strong preference for solitude and introspection. Individuals with this score tend to avoid large groups, enjoy spending time alone, and may feel overwhelmed or exhausted in social situations. They are highly introverted and find fulfillment in quieter, solitary activities.`;
+          description = `You have a very low level of extraversion, which means you are highly introverted and tend to prefer solitude over socializing. Large gatherings or frequent social interactions may feel overwhelming, and you’re more likely to feel comfortable in quiet, calm environments where you can focus on your own thoughts. You might avoid being the center of attention and instead find fulfillment in one-on-one conversations or solitary activities like reading, writing, or introspection. Social situations may drain you rather than energize you, and you may prefer to spend your time in a way that allows for personal reflection and recharge. While you can still enjoy socializing in familiar settings or with close friends, you tend to value your privacy and quiet time far more than engaging with large groups or seeking out new social experiences.`;
         }
         break;
       case "agreeableness":
-        if (percentage > 80) {
-          description = `A score greater than 80 indicates a highly agreeable individual who is compassionate, empathetic, and cooperative. They value harmony in relationships and are typically kind, considerate, and willing to go out of their way to help others. These individuals are often seen as friendly and supportive.`;
-        } else if (percentage > 60) {
-          description = `Individuals scoring above 60 are generally kind, helpful, and cooperative. They are considerate of others’ feelings and try to avoid conflict, although they may occasionally assert their own views when necessary. They value positive relationships but can be more assertive when the situation calls for it.`;
-        } else if (percentage > 40) {
-          description = `A score above 40 reflects a moderate level of agreeableness. These individuals may be cooperative but are also more likely to stand their ground when needed. They are willing to help others but may not always go out of their way to avoid conflict or prioritize others' needs over their own.`;
-        } else if (percentage > 20) {
-          description = `With scores between 20 and 40, individuals may be more competitive, independent, or critical. They are less likely to prioritize others' feelings or harmony in relationships, and may not always be inclined to help others unless it benefits them directly.`;
+        if (percentage >= 80) {
+          description = `You have an exceptionally high level of agreeableness, which means you are kind, empathetic, and always considerate of others' feelings. You are naturally cooperative and tend to go out of your way to make others feel comfortable and valued. Your compassion and understanding make you someone people feel they can trust and rely on. You’re highly attuned to the needs and emotions of others, often putting their well-being ahead of your own. You have a strong desire to avoid conflict and maintain harmony in relationships, which can make you a great listener and a supportive friend. Your generosity and willingness to help others, even when it's not expected, reflect a deep sense of care and kindness. However, this can sometimes lead to putting others' needs before your own, so finding a balance between being supportive and looking after yourself is important.`;
+        } else if (percentage >= 60) {
+          description = `You have a moderately high level of agreeableness, meaning you are generally kind, cooperative, and considerate of others, though you also have the ability to assert yourself when necessary. You enjoy helping others and maintaining positive relationships, and you’re often sensitive to the needs and feelings of those around you. Your approach to conflict is typically calm and collaborative, preferring to find a solution that benefits everyone. While you value harmony, you’re also capable of standing your ground and expressing your own needs and opinions when required. You tend to be a reliable and trustworthy friend, and people appreciate your supportive nature. At times, you might put others first, but you also understand the importance of balancing kindness with setting healthy boundaries to ensure your own well-being.`;
+        } else if (percentage >= 40) {
+          description = `You have a balanced level of agreeableness, which means you are generally cooperative and considerate, but you're also capable of being assertive when the situation requires it. You can be empathetic and understanding towards others, yet you're not overly accommodating or overly concerned with avoiding conflict. You value positive relationships but are more comfortable speaking up for yourself and expressing your opinions, even if they may sometimes differ from others. While you tend to get along well with people, you also maintain a sense of independence and are willing to stand your ground when needed. You strike a healthy balance between being supportive and maintaining your own boundaries, and you're not afraid to voice your needs or preferences, especially when it’s important to do so.`;
+        } else if (percentage >= 20) {
+          description = `You have a relatively low level of agreeableness, which means you tend to prioritize your own needs and opinions over maintaining harmony or pleasing others. While you're not necessarily unkind, you may be more straightforward, assertive, or even blunt in your interactions. You value honesty and directness, often feeling that it's more important to express your true feelings rather than accommodate others’ desires. You may find it difficult to avoid conflict and are not afraid to stand up for yourself, even if it means creating tension. This trait allows you to be independent and self-sufficient, but it can also lead to occasional misunderstandings with those who expect more diplomacy or sensitivity. You may not seek to please everyone, focusing more on your own goals and perspectives than on keeping the peace in relationships.`;
         } else {
-          description = `A score below 20 suggests low agreeableness, with individuals who may be blunt, skeptical, and less concerned with others' emotions or needs. They are more likely to challenge authority, question others’ motives, and prioritize their own interests over maintaining harmony in relationships.`;
+          description = `You have a very low level of agreeableness, which means you tend to be more self-focused and direct in your interactions. You are less concerned with the feelings or opinions of others and prioritize your own goals, beliefs, and needs. While this can make you highly independent and confident in your decisions, it may also result in a tendency to challenge or disregard social norms and expectations. You are likely less inclined to seek harmony or avoid conflict, and you might express your thoughts and feelings in a blunt or unapologetic way. This can sometimes lead to misunderstandings or friction with others, as you may come across as insensitive or indifferent to their concerns. While you value your own perspective above others’, it’s important to recognize that this approach can limit the depth of your relationships or the support you receive from others.`;
         }
         break;
       case "neuroticism":
-        if (percentage > 80) {
-          description = ` A score greater than 80 indicates a highly neurotic individual who is prone to experiencing strong negative emotions such as anxiety, fear, and sadness. They may be highly sensitive to stress, easily overwhelmed by challenges, and prone to emotional instability. These individuals often worry excessively about potential problems.`;
-        } else if (percentage > 60) {
-          description = `Individuals scoring above 60 may experience anxiety, stress, and mood swings more frequently than others. While they may not be constantly anxious, they are more sensitive to stress and may react strongly to negative events. They are prone to occasional emotional ups and downs.`;
-        } else if (percentage > 40) {
-          description = `A score above 40 indicates a moderate level of neuroticism. These individuals may experience negative emotions from time to time, but they generally cope well with stress and are more emotionally stable compared to those with higher scores. They may experience anxiety in stressful situations but can usually manage it.`;
-        } else if (percentage > 20) {
-          description = `With scores between 20 and 40, individuals are generally emotionally stable, experiencing negative emotions less frequently and being more resilient to stress. They are able to handle challenges without becoming overly anxious or upset.`;
+        if (percentage >= 80) {
+          description = `You have a very high level of neuroticism, which means you experience intense emotional reactions to stress, anxiety, and negative situations. Your feelings tend to be more volatile, and you may frequently feel overwhelmed by worry, frustration, or sadness. You are highly sensitive to stressors and may find it difficult to cope with challenges without feeling anxious or discouraged. Your mood can fluctuate rapidly, and you may often find yourself ruminating over past events or worrying about the future. This heightened emotional reactivity can make it harder to bounce back from setbacks, and you might struggle to maintain a sense of calm in stressful situations. While your emotional depth allows you to experience strong feelings, it’s important to recognize that this sensitivity can sometimes lead to unnecessary stress or difficulty in managing your emotions. Finding ways to build emotional resilience and manage anxiety can help you navigate life with greater stability.`;
+        } else if (percentage >= 60) {
+          description = `You have a moderately high level of neuroticism, meaning you tend to experience emotional ups and downs more frequently than others. While you may not be overwhelmed by emotions as often, you are still sensitive to stress, anxiety, and negative feelings. You might find yourself worrying about various aspects of life, and at times, these worries can feel intense. Stressful situations can trigger feelings of insecurity or frustration, and you may sometimes overthink challenges or setbacks. However, your emotional responses are generally manageable, and you are able to regain stability with some effort. While you may experience occasional mood swings or anxiety, you also have the ability to reflect on your emotions and find ways to cope. Being aware of your emotional triggers and developing strategies to manage stress can help you maintain a more balanced outlook.`;
+        } else if (percentage >= 40) {
+          description = `You have a balanced level of neuroticism, meaning you experience emotional ups and downs, but they tend to be moderate and manageable. While you may occasionally feel anxious, stressed, or frustrated, these emotions are generally not overwhelming and you are able to recover fairly quickly. You can be sensitive to negative situations, but you usually handle them with a more grounded perspective, and you are able to stay calm in most circumstances. You may occasionally worry or feel insecure, but it tends to be more situational rather than a constant state of mind. Your ability to reflect on your emotions and approach challenges in a logical way helps you maintain balance, even when things don’t go as planned. While you’re not immune to stress, you’re generally able to keep it in check and avoid letting it affect your overall well-being.`;
+        } else if (percentage >= 20) {
+          description = `You have a relatively low level of neuroticism, meaning you tend to remain calm and composed even in stressful situations. Emotional ups and downs are less frequent for you, and you are generally able to manage negative emotions like anxiety, worry, or frustration with ease. You are less sensitive to stress and more resilient in the face of challenges, often approaching difficulties with a level-headed and rational mindset. While you may experience occasional feelings of insecurity or doubt, these tend to be short-lived and don't significantly impact your overall emotional state. Your ability to maintain emotional stability and stay optimistic in tough situations allows you to navigate life with confidence and a positive outlook. You are likely to be perceived as calm, collected, and self-assured by those around you.`;
         } else {
-          description = `A score below 20 reflects a high level of emotional stability. These individuals tend to stay calm and composed under pressure, rarely experiencing intense negative emotions. They are less likely to get anxious, stressed, or upset and are generally able to handle adversity with ease.`;
+          description = `You have a very low level of neuroticism, meaning you are highly emotionally stable and rarely experience intense negative emotions such as anxiety, worry, or frustration. You are generally calm, composed, and resilient, even in stressful situations, and you tend to bounce back quickly from setbacks. Emotional turmoil and stressors have minimal impact on you, and you approach challenges with a sense of confidence and ease. Your ability to remain steady and unaffected by negative emotions allows you to maintain a positive and optimistic outlook on life. You are rarely troubled by self-doubt or insecurity and tend to stay focused and grounded, regardless of the external circumstances. This emotional stability makes you someone who is not easily rattled and can handle high-pressure situations with grace.`;
         }
         break;
       default:
@@ -1286,10 +1476,9 @@ app.post("/sendResultsAsEmail", (req, res) => {
   res.json("Email sent successfully");
 });
 
-app.post("/updateCompletedTestField", async (req, res) => {
+app.post("/updateCompletedTestField", authMiddleware, async (req, res) => {
   try {
-    const userId = req.query.userId;
-    console.log("User ID:", userId);
+    const userId = req.user.id;
     await connection.query(
       "UPDATE tbl_users SET has_completed_career_test = 1 WHERE id = ?",
       [userId],
@@ -1308,9 +1497,9 @@ app.post("/updateCompletedTestField", async (req, res) => {
   }
 });
 
-app.post("/checkout", async (req, res) => {
-  const userId = req.body.userId;
-  const email = req.body.email;
+app.post("/checkout", authMiddleware, async (req, res) => {
+  const userId = req.user.id;
+  const email = req.user.email;
   console.log(email);
 
   connection.query(
@@ -1342,20 +1531,6 @@ app.post("/checkout", async (req, res) => {
 
         console.log(session);
 
-        if (session.id) {
-          connection.query(
-            `UPDATE tbl_users SET is_paid = 1 WHERE id = ?`,
-            [userId],
-            (updateErr, updateResult) => {
-              if (updateErr) {
-                console.error("Error updating user payment status:", updateErr);
-              } else {
-                console.log("User payment status updated successfully.");
-              }
-            }
-          );
-        }
-
         return res.json({ url: session.url });
       } catch (err) {
         console.error("Error creating checkout session:", err);
@@ -1365,6 +1540,27 @@ app.post("/checkout", async (req, res) => {
   );
 });
 
+app.post("/updateIsPaidField", authMiddleware, async (req, res) => {
+  const userId = req.user.id;
+  connection.query(
+    `UPDATE tbl_users SET is_paid = 1 WHERE id = ?`,
+    [userId],
+    (updateErr, updateResult) => {
+      if (updateErr) {
+        console.error("Error updating user payment status:", updateErr);
+        return res.status(500).json({
+          error: "Error updating user payment status",
+        });
+      } else {
+        console.log("User payment status updated successfully.");
+        return res.status(200).json({
+          success: true,
+          message: "User payment status updated successfully.",
+        });
+      }
+    }
+  );
+});
 /*passport.use(
   "google",
   new GoogleStrategy(
