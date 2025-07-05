@@ -682,7 +682,12 @@ app.post("/login", async (req, res) => {
                     process.env.NODE_ENV === "production" ? "None" : "Lax",
                   maxAge: 3600000,
                 });
-                res.json({ result: user });
+
+                const userDetails = {
+                  name: user.name,
+                  is_paid: user.is_paid,
+                };
+                res.json({ result: userDetails });
               } else {
                 return res.send("Incorrect Password");
               }
@@ -755,12 +760,15 @@ app.post("/getTestResults", authMiddleware, async (req, res) => {
         (err, result) => {
           if (result.length > 0) {
             const row = result[0];
-
+            const resultDetails = {
+              question_id: row.question_id,
+              test_results: row.test_results,
+            };
             if (err) {
               console.error("Error comparing passwords:", err);
             } else {
               if (result) {
-                res.json({ result: row });
+                res.json({ result: resultDetails });
               } else {
                 res.send("Error");
               }
@@ -777,12 +785,15 @@ app.post("/getTestResults", authMiddleware, async (req, res) => {
         (err, result) => {
           if (result.length > 0) {
             const row = result[0];
-
+            const resultDetails = {
+              question_id: row.question_id,
+              test_results: row.test_results,
+            };
             if (err) {
               console.error("Error comparing passwords:", err);
             } else {
               if (result) {
-                res.json({ result: row });
+                res.json({ result: resultDetails });
               } else {
                 res.send("Error");
               }
@@ -821,8 +832,7 @@ app.get("/calculateCareerScore", (req, res) => {
   const { id, result } = req.query;
   const questionIds = id ? id.split(",").map(Number) : []; // Split by commas if `id` is a comma-separated string
   const selectedValues = result ? result.split(",") : [];
-  console.log("questionIds", questionIds);
-  console.log("selectedValues", selectedValues);
+
   let opennessResult = [];
   let conscientiousnessResult = [];
   let extraversionResult = [];
@@ -852,7 +862,7 @@ app.get("/calculateCareerScore", (req, res) => {
     const question = CareerQuestions.find((q) => q.id === id);
     if (question) {
       const selectedValue = selectedValues[index];
-      console.log(question);
+
       let newScore = 0;
       if (question.facet === "negative") {
         if (selectedValue === "stronglyDisagree") {
@@ -1188,8 +1198,7 @@ app.get("/calculateScore", (req, res) => {
   const { id, result } = req.query;
   const questionIds = id ? id.split(",").map(Number) : []; // Split by commas if `id` is a comma-separated string
   const selectedValues = result ? result.split(",") : [];
-  console.log("questionIds", questionIds);
-  console.log("selectedValues", selectedValues);
+
   let opennessResult = [];
   let conscientiousnessResult = [];
   let extraversionResult = [];
@@ -1218,7 +1227,7 @@ app.get("/calculateScore", (req, res) => {
     const question = Questions.find((q) => q.id === id);
     if (question) {
       const selectedValue = selectedValues[index];
-      console.log(question);
+
       let newScore = 0;
       if (question.facet === "negative") {
         if (selectedValue === "stronglyDisagree") {
@@ -1451,7 +1460,7 @@ app.post("/sendResultsAsEmail", (req, res) => {
   // Define PDF name and path
   const pdfName = result.fileName;
   const filePath = path.join(__dirname, "pdfs", pdfName);
-  console.log(result);
+
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
