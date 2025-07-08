@@ -1,9 +1,7 @@
 import express from "express";
 import cors from "cors";
 import env from "dotenv";
-import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import nodemailer from "nodemailer";
-import PDFDocument from "pdfkit";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -538,6 +536,129 @@ export const CareerQuestions = [
   },
 ];
 
+export const careerMapping = [
+  {
+    name: "Software & Technology",
+    traitScore: { O: 70, C: 85, E: 30, A: 50, N: 30 },
+    careerDesc:
+      "You excel in designing and building logical systems. Your strengths in problem-solving and precision make you well-suited for roles that demand technical thinking and innovation in the digital world.",
+  },
+  {
+    name: "User Experience & Creative Design",
+    traitScore: { O: 85, C: 65, E: 50, A: 60, N: 40 },
+    careerDesc:
+      "You thrive in creative environments that focus on human-centered design. Your blend of imagination and empathy suits careers where visual storytelling and usability go hand in hand.",
+  },
+  {
+    name: "Sales & Business Development",
+    traitScore: { O: 55, C: 70, E: 85, A: 65, N: 45 },
+    careerDesc:
+      "You’re naturally persuasive and energetic. You excel in dynamic, people-facing roles that involve building relationships, negotiating, and driving business success.",
+  },
+  {
+    name: "Scientific Research & Innovation",
+    traitScore: { O: 90, C: 85, E: 20, A: 40, N: 30 },
+    careerDesc:
+      "You’re curious and analytical, often diving deep into complex problems. You enjoy careers focused on discovering new knowledge and contributing to scientific or technical advancement.",
+  },
+  {
+    name: "Human Resources & Employee Relations",
+    traitScore: { O: 60, C: 70, E: 60, A: 85, N: 35 },
+    careerDesc:
+      "You are supportive and organized, making you ideal for careers that involve managing people, resolving workplace issues, and fostering positive company culture.",
+  },
+  {
+    name: "Entrepreneurship & Startups",
+    traitScore: { O: 75, C: 75, E: 75, A: 45, N: 40 },
+    careerDesc:
+      "You’re driven by innovation and independence. You’re well-suited for paths where risk-taking, leadership, and self-motivation lead to creating and scaling new ventures.",
+  },
+  {
+    name: "Marketing & Strategy",
+    traitScore: { O: 80, C: 70, E: 65, A: 55, N: 40 },
+    careerDesc:
+      "You combine creativity with strategic thinking. This career path involves analyzing markets, building brand identity, and crafting persuasive messages to engage audiences.",
+  },
+  {
+    name: "Visual Arts & Multimedia",
+    traitScore: { O: 90, C: 60, E: 40, A: 60, N: 35 },
+    careerDesc:
+      "Your artistic talent and eye for aesthetics make you a strong fit for careers that involve visual storytelling, creative expression, and digital media design.",
+  },
+  {
+    name: "Data & Analytics",
+    traitScore: { O: 65, C: 80, E: 30, A: 45, N: 30 },
+    careerDesc:
+      "You are detail-oriented and logical. This path suits those who enjoy working with numbers and trends to support data-driven decisions and strategic planning.",
+  },
+  {
+    name: "Project & Operations Management",
+    traitScore: { O: 65, C: 90, E: 55, A: 55, N: 35 },
+    careerDesc:
+      "You’re a natural organizer who ensures things get done efficiently. This path involves coordinating teams, meeting deadlines, and delivering successful outcomes.",
+  },
+  {
+    name: "Education & Teaching",
+    traitScore: { O: 70, C: 75, E: 70, A: 80, N: 40 },
+    careerDesc:
+      "You are empathetic, organized, and a clear communicator. You thrive in roles that allow you to share knowledge, support growth, and inspire others.",
+  },
+  {
+    name: "Mental Health & Counseling",
+    traitScore: { O: 85, C: 70, E: 50, A: 85, N: 30 },
+    careerDesc:
+      "You’re empathetic and insightful, with a strong desire to help others. Careers in this path focus on improving emotional well-being and supporting personal growth.",
+  },
+  {
+    name: "Finance & Investment Analysis",
+    traitScore: { O: 60, C: 85, E: 35, A: 50, N: 25 },
+    careerDesc:
+      "You are analytical and risk-aware, suited for careers that involve evaluating data and offering financial guidance to support smart investment and budgeting decisions.",
+  },
+  {
+    name: "Corporate Law & Compliance",
+    traitScore: { O: 55, C: 90, E: 60, A: 45, N: 35 },
+    careerDesc:
+      "You are structured and persuasive, well-suited for roles that require understanding legal frameworks, ensuring compliance, and protecting business interests.",
+  },
+  {
+    name: "Client Relations & Customer Experience",
+    traitScore: { O: 60, C: 65, E: 75, A: 80, N: 40 },
+    careerDesc:
+      "You’re personable and attentive, excelling in roles where building trust and maintaining positive client relationships are key to business success.",
+  },
+  {
+    name: "Architecture & Environmental Design",
+    traitScore: { O: 80, C: 80, E: 45, A: 50, N: 30 },
+    careerDesc:
+      "You blend creativity with structural understanding. This path is ideal for those passionate about designing functional and visually striking spaces.",
+  },
+  {
+    name: "Media & Journalism",
+    traitScore: { O: 85, C: 70, E: 70, A: 55, N: 40 },
+    careerDesc:
+      "You are inquisitive and articulate, thriving in roles that involve storytelling, investigation, and keeping the public informed through diverse media platforms.",
+  },
+  {
+    name: "Therapy & Rehabilitation",
+    traitScore: { O: 65, C: 75, E: 55, A: 90, N: 30 },
+    careerDesc:
+      "You are nurturing and practical, ideal for paths that focus on helping individuals regain independence and improve their daily quality of life.",
+  },
+  {
+    name: "Event & Experience Planning",
+    traitScore: { O: 60, C: 70, E: 85, A: 65, N: 45 },
+    careerDesc:
+      "You’re detail-oriented and socially confident. This path fits those who enjoy organizing, coordinating, and ensuring seamless and memorable experiences.",
+  },
+  {
+    name: "Digital Marketing & Content Creation",
+    traitScore: { O: 75, C: 70, E: 60, A: 60, N: 35 },
+    careerDesc:
+      "You thrive at the intersection of creativity and strategy. This path involves engaging audiences, building brand loyalty, and driving online growth through digital platforms.",
+  },
+];
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 // Create the 'pdfs' folder if it doesn't exist
@@ -546,10 +667,6 @@ const pdfFolder = path.join(__dirname, "pdfs");
 if (!fs.existsSync(pdfFolder)) {
   fs.mkdirSync(pdfFolder);
 }
-//const pdfName = "big5_results_1743800032249.pdf";
-
-// Combine the folder path and the file name to create the full path
-//const pdfPath = path.join(pdfFolder, pdfName);
 
 const app = express();
 
@@ -559,21 +676,26 @@ env.config();
 
 const jwtSecretKey = process.env.JWT_SECRET_KEY;
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-const saltRounds = 10;
+
+const saltRounds = process.env.SALTROUNDS;
+
 const connection = mysql.createConnection({
   host: process.env.MYSQL_HOST,
   user: process.env.MYSQL_USER,
   password: process.env.MYSQL_PASSWORD,
   database: process.env.MYSQL_DATABASE,
 });
+
 app.use(
   cors({
     origin: "http://localhost:5173", // your frontend URL
     credentials: true, // allow cookies and credentials
   })
 );
+
 app.use(express.json());
 app.use(cookieParser());
+
 const authMiddleware = (req, res, next) => {
   const token = req.cookies.authToken;
 
@@ -602,13 +724,14 @@ const authMiddleware = (req, res, next) => {
         next();
       }
     );
-    //req.user = user; // Attach user information to the request
-    // Proceed to the next middleware or route handler
   });
 };
 
 app.get("/protected", authMiddleware, (req, res) => {
-  res.json({ message: "This is a protected route", user: req.user });
+  res.json({
+    message: "This is a protected route",
+    user: { name: req.user.name, is_paid: req.user.is_paid },
+  });
 });
 
 app.get("/", (req, res) => {
@@ -650,7 +773,7 @@ app.post("/login", async (req, res) => {
   try {
     const email = req.body.email;
     const loginPassword = req.body.password;
-    console.log(req.body);
+
     await connection.query(
       "SELECT * FROM tbl_users WHERE email = ?",
       [email],
@@ -664,7 +787,6 @@ app.post("/login", async (req, res) => {
               console.error("Error comparing passwords:", err);
             } else {
               if (result) {
-                console.log(jwtSecretKey);
                 const token = jwt.sign(
                   {
                     id: user.id,
@@ -716,7 +838,6 @@ app.post("/logout", async (req, res) => {
 app.post("/forgotPassword", async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log(req.body);
 
     const hash = await bcrypt.hash(password, saltRounds);
 
@@ -736,8 +857,7 @@ app.post("/forgotPassword", async (req, res) => {
 
 app.post("/saveResults", authMiddleware, async (req, res) => {
   const userId = req.user.id;
-  const { questionId, testResults, testType } = req.body;
-  console.log(req.body);
+
   await connection.query(
     "INSERT INTO tbl_testresults(user_id,question_id, test_result, test_type) VALUES(?, ?, ?,?)",
     [userId, questionId, testResults, testType]
@@ -750,9 +870,6 @@ app.post("/getTestResults", authMiddleware, async (req, res) => {
     const userId = req.user.id;
     const isPaid = req.user.is_paid;
     const { testType } = req.body;
-    console.log(userId);
-    console.log(testType);
-    console.log("Received userId:", userId);
     if (isPaid === 1 && testType === "Career Test") {
       await connection.query(
         "SELECT * FROM tbl_testresults WHERE user_id = ? and test_type=?",
@@ -762,7 +879,7 @@ app.post("/getTestResults", authMiddleware, async (req, res) => {
             const row = result[0];
             const resultDetails = {
               question_id: row.question_id,
-              test_results: row.test_results,
+              test_result: row.test_result,
             };
             if (err) {
               console.error("Error comparing passwords:", err);
@@ -787,7 +904,7 @@ app.post("/getTestResults", authMiddleware, async (req, res) => {
             const row = result[0];
             const resultDetails = {
               question_id: row.question_id,
-              test_results: row.test_results,
+              test_result: row.test_result,
             };
             if (err) {
               console.error("Error comparing passwords:", err);
@@ -893,7 +1010,6 @@ app.get("/calculateCareerScore", (req, res) => {
       switch (question.trait.toLowerCase()) {
         case "openness":
           opennessResult.push(newScore);
-          console.log(opennessResult);
           break;
         case "conscientiousness":
           conscientiousnessResult.push(newScore);
@@ -947,12 +1063,14 @@ app.get("/calculateCareerScore", (req, res) => {
     );
     const percentage = Math.round((totalScore / (traitCount * 5)) * 100);
 
-    return { score: percentage, desc: generateDescription(percentage, trait) };
+    return {
+      score: percentage,
+      desc: generateDescription(percentage, trait),
+    };
   }
 
   function generateDescription(percentage, trait) {
     let description = "";
-    let careerchoice = "";
     let templatePath = "";
     switch (trait) {
       case "openness":
@@ -1039,7 +1157,7 @@ app.get("/calculateCareerScore", (req, res) => {
         } else if (percentage >= 40) {
           templatePath = path.join(
             __dirname,
-            "career-descriptions/openness-40.html"
+            "career-descriptions/extraversion-40.html"
           );
           description = fs.readFileSync(templatePath, "utf8");
         } else if (percentage >= 20) {
@@ -1129,55 +1247,42 @@ app.get("/calculateCareerScore", (req, res) => {
     return description;
   }
 
-  // Create PDF document and save it to server
-  /* const doc = new PDFDocument();
-  const fileName = `big5_results_${Date.now()}.pdf`;
-  const filePath = path.join(__dirname, "pdfs", fileName);
+  const userTraitResults = {
+    O: opennessScore.score,
+    C: conscientiousnessScore.score,
+    E: extraversionScore.score,
+    A: agreeablenessScore.score,
+    N: neuroticismScore.score,
+  };
 
-  const writeStream = fs.createWriteStream(filePath);
-  doc.pipe(writeStream);
+  const bestCareer = getCareerSuggestion(userTraitResults, careerMapping);
 
-  // Add content to PDF
-  doc
-    .fontSize(18)
-    .text("Big Five Personality Test Results", { align: "center" });
-  doc.moveDown();
-
-  // Add results
-  doc.fontSize(12).text(`Openness: ${opennessScore.score}%`);
-  doc.text(opennessScore.desc);
-  doc.moveDown();
-
-  doc.text(`Conscientiousness: ${conscientiousnessScore.score}%`);
-  doc.text(conscientiousnessScore.desc);
-  doc.moveDown();
-
-  doc.text(`Extraversion: ${extraversionScore.score}%`);
-  doc.text(extraversionScore.desc);
-  doc.moveDown();
-
-  doc.text(`Agreeableness: ${agreeablenessScore.score}%`);
-  doc.text(agreeablenessScore.desc);
-  doc.moveDown();
-
-  doc.text(`Neuroticism: ${neuroticismScore.score}%`);
-  doc.text(neuroticismScore.desc);
-
-  // Finalize the PDF
-  doc.end();*/
-
-  /*writeStream.on("finish", () => {
-    // Send the response with the file path
-    res.json({
-      message: "PDF generated and saved successfully.",
-      fileName: fileName,
-      openness: opennessScore,
-      conscientiousness: conscientiousnessScore,
-      extraversion: extraversionScore,
-      agreeableness: agreeablenessScore,
-      neuroticism: neuroticismScore,
+  function getCareerSuggestion(userTraitResults, careerMapping) {
+    let traitArr = [];
+    careerMapping.forEach((career) => {
+      const totalDifference = calculateDifference(
+        userTraitResults,
+        career.traitScore
+      );
+      traitArr.push(totalDifference);
     });
-  });*/
+
+    const minimumTraitScore = Math.min(...traitArr);
+    const indexOfTraitScore = traitArr.indexOf(minimumTraitScore);
+    const bestCareer = careerMapping[indexOfTraitScore];
+
+    return bestCareer;
+  }
+
+  function calculateDifference(userTraitResults, careerMappingTraits) {
+    let totalDifferenceScore = 0;
+    for (let trait in userTraitResults) {
+      totalDifferenceScore += Math.abs(
+        userTraitResults[trait] - careerMappingTraits[trait]
+      );
+    }
+    return totalDifferenceScore;
+  }
 
   res.json({
     message: "PDF generated and saved successfully.",
@@ -1186,12 +1291,8 @@ app.get("/calculateCareerScore", (req, res) => {
     extraversion: extraversionScore,
     agreeableness: agreeablenessScore,
     neuroticism: neuroticismScore,
+    bestCareer: bestCareer,
   });
-
-  /*writeStream.on("error", (err) => {
-    console.log(err);
-    res.status(500).json({ error: "Error generating PDF" });
-  });*/
 });
 
 app.get("/calculateScore", (req, res) => {
@@ -1258,7 +1359,6 @@ app.get("/calculateScore", (req, res) => {
       switch (question.trait.toLowerCase()) {
         case "openness":
           opennessResult.push(newScore);
-          console.log(opennessResult);
           break;
         case "conscientiousness":
           conscientiousnessResult.push(newScore);
@@ -1317,75 +1417,175 @@ app.get("/calculateScore", (req, res) => {
 
   function generateDescription(percentage, trait) {
     let description = "";
+    let templatePath = "";
     switch (trait) {
       case "openness":
         if (percentage >= 80) {
-          description = `You have an exceptionally high level of openness, which means your mind is naturally expansive, imaginative, and eager to explore new and unconventional ideas. You thrive on creativity, abstract thinking, and intellectual discovery, often questioning norms and seeking out novel experiences. You’re deeply introspective and enjoy contemplating complex concepts, emotions, and possibilities. Your imagination is vivid, and you’re likely drawn to beauty, symbolism, and depth in everything from art and music to ideas and personal experiences. People with this level of openness often feel energized by change, diversity, and complexity, and they tend to embrace ambiguity rather than shy away from it. You value authenticity, emotional richness, and personal growth, often seeing the world not just as it is, but as it could be.`;
+          templatePath = path.join(
+            __dirname,
+            "personality-descriptions/openness-80.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
+          //description = `A score above 80 signifies a strong preference for intellectual exploration, creative thinking, and a willingness to embrace novel ideas and unconventional experiences. You are drawn to abstract concepts, aesthetics, and new challenges, and likely thrive in environments that reward curiosity and innovation.You may excel in careers that involve creativity, innovation, and intellectual exploration, such as UX/UI design, research, architecture, or roles in the arts and creative consulting.`;
         } else if (percentage >= 60) {
-          description = `You have a moderately high level of openness, which means you’re naturally curious, imaginative, and open to exploring new ideas and perspectives. You enjoy thinking creatively and often find yourself reflecting on abstract concepts or possibilities beyond the surface. While you're not extreme in your preferences, you likely appreciate art, music, literature, or philosophical thought, and you value meaningful experiences that challenge your understanding of the world. You’re receptive to change and tend to enjoy variety in life, whether through travel, new hobbies, or diverse conversations. Your open mindset allows you to see connections others might miss, and you're often drawn to exploring different viewpoints. At the same time, you maintain enough grounding to evaluate new ideas thoughtfully rather than impulsively.`;
+          templatePath = path.join(
+            __dirname,
+            "personality-descriptions/openness-60.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
         } else if (percentage >= 40) {
-          description = `IYou show a balanced level of openness, indicating that you value both tradition and new ideas in equal measure. You're practical and realistic, often preferring tried-and-true methods over untested approaches. At the same time, you're not completely closed off to novelty—you’re open to change and new experiences if they seem reasonable or beneficial. You may enjoy learning new things occasionally but might not actively seek out abstract theories or unconventional perspectives. Your thinking tends to be grounded, and you likely prefer facts and tangible outcomes over speculation or fantasy. This middle-ground approach helps you navigate both the familiar and the unfamiliar with a sense of measured curiosity and thoughtful consideration.`;
+          templatePath = path.join(
+            __dirname,
+            "personality-descriptions/openness-40.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
         } else if (percentage >= 20) {
-          description = `You have a relatively low level of openness, which means you tend to be practical, conventional, and more comfortable with familiar routines and well-established ideas. You likely prefer structure, predictability, and concrete information over abstract or theoretical thinking. Change may feel unsettling rather than exciting, and you might approach new experiences with caution or skepticism. Your thinking is grounded in real-world logic and facts, and you value consistency and tradition. Rather than seeking novelty, you often find satisfaction in stability and clear expectations. While you may not be drawn to imaginative or artistic pursuits, your straightforward approach helps you stay focused, dependable, and clear-headed in everyday life.`;
+          templatePath = path.join(
+            __dirname,
+            "personality-descriptions/openness-20.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
         } else {
-          description = `You have a very low level of openness, which suggests a strong preference for familiarity, structure, and traditional ways of thinking. You likely value clear rules, routine, and practical approaches over novelty or abstract ideas. Imagination, fantasy, and unconventional concepts may hold little appeal for you, as you tend to trust proven methods and prefer sticking to what you know works. You might be more skeptical of change and less inclined to experiment or take intellectual or emotional risks. Your worldview is typically grounded, realistic, and focused on the tangible and immediate. While this may mean you're less drawn to creative or philosophical thinking, it also reflects a steady, no-nonsense mindset that prioritizes clarity, dependability, and straightforward decision-making.`;
+          templatePath = path.join(
+            __dirname,
+            "personality-descriptions/openness-10.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
         }
 
         break;
       case "conscientiousness":
         if (percentage >= 80) {
-          description = `You have an exceptionally high level of conscientiousness, which means you are highly organized, reliable, and diligent in everything you do. You thrive on structure, planning, and efficiency, and you are motivated to meet your goals with precision and dedication. Your attention to detail is exceptional, and you are often seen as someone who can be trusted to follow through on commitments and responsibilities. You likely have strong self-discipline, and you are careful in making decisions, weighing all possible outcomes to ensure that you make the right choice. This level of conscientiousness also means you tend to be very punctual, focused, and driven, often setting high standards for yourself and striving to meet them. While you are highly dependable, you may also be more cautious or risk-averse, preferring to stick to well-established methods rather than taking chances.`;
+          templatePath = path.join(
+            __dirname,
+            "personality-descriptions/c-80.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
         } else if (percentage >= 60) {
-          description = `You have a moderately high level of conscientiousness, which means you are generally organized, responsible, and goal-oriented, but you also allow yourself some flexibility. You take your responsibilities seriously and strive to meet your commitments, but you may not feel the need to be excessively perfectionistic or overly rigid. While you tend to approach tasks with thoughtfulness and care, you're also able to adapt when things don't go according to plan. You balance diligence and practicality with a sense of ease, making you reliable without being overly controlling. You likely value structure and routine, but you also recognize the importance of spontaneity and creativity in certain situations. Your ability to stay focused and organized helps you get things done, but you're not overly consumed by details, allowing you to maintain a healthy sense of work-life balance.`;
+          templatePath = path.join(
+            __dirname,
+            "personality-descriptions/c-60.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
         } else if (percentage >= 40) {
-          description = `You have a balanced level of conscientiousness, meaning you're generally responsible but also enjoy some flexibility in your approach to tasks and life. While you take care of your obligations and try to be reliable, you’re not overly concerned with perfection or strict organization. You prefer a practical approach to things, but you might not always stick to rigid plans or follow every detail to the letter. You can be dependable, but you also recognize the importance of adaptability and may not always feel the need to be meticulous. This middle-ground approach allows you to stay on track without becoming overwhelmed by structure, and you can find a balance between being organized and allowing room for spontaneity. You tend to be efficient, but you’re also comfortable letting things unfold naturally when appropriate.`;
+          templatePath = path.join(
+            __dirname,
+            "personality-descriptions/c-40.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
         } else if (percentage >= 20) {
-          description = `You have a relatively low level of conscientiousness, which means you may be more spontaneous and flexible in your approach to life, preferring to go with the flow rather than adhering to strict plans or routines. You may find it difficult to stick to a rigid schedule or focus on small details, and you’re likely to prioritize immediate enjoyment over long-term goals or obligations. While you can still be reliable when needed, you may not always be as meticulous or organized as others, and you might struggle with tasks that require a high level of discipline or careful planning. Your approach to life is more laid-back, and you tend to value freedom and flexibility over structure and control. This can make you more adaptable, but at times, it might also lead to unfinished projects or a tendency to procrastinate.`;
+          templatePath = path.join(
+            __dirname,
+            "personality-descriptions/c-20.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
         } else {
-          description = `You have a very low level of conscientiousness, which suggests a more carefree, spontaneous approach to life. You may find it challenging to maintain organization or structure in your daily routine, and you likely prefer to act on impulse rather than follow through on long-term plans. Details, deadlines, and careful planning may not be your priority, and you might prefer to live in the moment rather than worrying about future obligations or responsibilities. While this can make you flexible and adaptable, it might also lead to difficulties in staying on track or completing tasks that require sustained effort or attention. You may not always be the most reliable in terms of commitment, but your carefree nature allows you to take life as it comes without becoming bogged down by overthinking or excessive planning.`;
+          templatePath = path.join(
+            __dirname,
+            "personality-descriptions/c-10.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
         }
         break;
       case "extraversion":
         if (percentage >= 80) {
-          description = `You have an exceptionally high level of extraversion, which means you are outgoing, energetic, and thrive in social situations. You likely find joy in being around people, engaging in lively conversations, and participating in group activities. Your enthusiasm and positive energy can be contagious, and you often seek out new social experiences and opportunities to connect with others. You’re not shy about expressing yourself, and you're comfortable being the center of attention. Your energetic and adventurous nature makes you enjoy new challenges and experiences, and you're often seen as an optimist with a zest for life. You may find it difficult to stay quiet or be alone for extended periods, as social interaction fuels your energy and happiness. People with this level of extraversion tend to be confident, talkative, and easily able to build connections with a wide variety of people.`;
+          templatePath = path.join(
+            __dirname,
+            "personality-descriptions/e-80.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
         } else if (percentage >= 60) {
-          description = `You have a moderately high level of extraversion, which means you enjoy socializing and being around others, but you also value some quiet time to recharge. You tend to be outgoing, enthusiastic, and comfortable in social settings, often feeling energized by interacting with people. While you enjoy participating in group activities and can easily strike up conversations, you don’t always feel the need to be the center of attention. You can balance your social life with moments of solitude, allowing yourself to rest and reflect when needed. Your enthusiasm and positive attitude make you approachable, and you likely feel most at ease in familiar social situations, though you’re also open to meeting new people and exploring new experiences. Your extraverted nature allows you to build connections with ease, but you're equally comfortable with introspective moments.`;
+          templatePath = path.join(
+            __dirname,
+            "personality-descriptions/e-60.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
         } else if (percentage >= 40) {
-          description = `You have a balanced level of extraversion, meaning you enjoy socializing but also appreciate your time alone. You’re comfortable in social settings and can engage in conversations, but you’re not necessarily the life of the party. You might enjoy social interactions in smaller groups or one-on-one settings rather than large, lively gatherings. While you may not seek out constant social stimulation, you do enjoy connecting with others when the situation calls for it. You tend to be more reserved compared to highly extraverted individuals, but you're still warm, approachable, and friendly. You strike a healthy balance between being outgoing and valuing personal space, often choosing to recharge quietly after social events. Your social energy is adaptable, allowing you to fit into various situations without feeling overwhelmed or drained.`;
+          templatePath = path.join(
+            __dirname,
+            "personality-descriptions/e-40.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
         } else if (percentage >= 20) {
-          description = `You have a relatively low level of extraversion, which means you tend to be more reserved and introspective. While you may enjoy social interactions occasionally, you generally prefer solitude or spending time in smaller, more intimate settings rather than large, crowded social gatherings. You might feel drained after extended socializing and need time alone to recharge. You may not actively seek out attention or be eager to engage in conversations with strangers, but when you do interact, you are thoughtful and considerate. Your energy is more focused inward, and you tend to enjoy activities that allow for quiet reflection or deep thought. While you can be social when necessary, you typically feel more comfortable in environments where you can be yourself without feeling the pressure to be outgoing or constantly engaged with others.`;
+          templatePath = path.join(
+            __dirname,
+            "personality-descriptions/e-20.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
         } else {
-          description = `You have a very low level of extraversion, which means you are highly introverted and tend to prefer solitude over socializing. Large gatherings or frequent social interactions may feel overwhelming, and you’re more likely to feel comfortable in quiet, calm environments where you can focus on your own thoughts. You might avoid being the center of attention and instead find fulfillment in one-on-one conversations or solitary activities like reading, writing, or introspection. Social situations may drain you rather than energize you, and you may prefer to spend your time in a way that allows for personal reflection and recharge. While you can still enjoy socializing in familiar settings or with close friends, you tend to value your privacy and quiet time far more than engaging with large groups or seeking out new social experiences.`;
+          templatePath = path.join(
+            __dirname,
+            "personality-descriptions/e-10.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
         }
         break;
       case "agreeableness":
         if (percentage >= 80) {
-          description = `You have an exceptionally high level of agreeableness, which means you are kind, empathetic, and always considerate of others' feelings. You are naturally cooperative and tend to go out of your way to make others feel comfortable and valued. Your compassion and understanding make you someone people feel they can trust and rely on. You’re highly attuned to the needs and emotions of others, often putting their well-being ahead of your own. You have a strong desire to avoid conflict and maintain harmony in relationships, which can make you a great listener and a supportive friend. Your generosity and willingness to help others, even when it's not expected, reflect a deep sense of care and kindness. However, this can sometimes lead to putting others' needs before your own, so finding a balance between being supportive and looking after yourself is important.`;
+          templatePath = path.join(
+            __dirname,
+            "personality-descriptions/a-80.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
         } else if (percentage >= 60) {
-          description = `You have a moderately high level of agreeableness, meaning you are generally kind, cooperative, and considerate of others, though you also have the ability to assert yourself when necessary. You enjoy helping others and maintaining positive relationships, and you’re often sensitive to the needs and feelings of those around you. Your approach to conflict is typically calm and collaborative, preferring to find a solution that benefits everyone. While you value harmony, you’re also capable of standing your ground and expressing your own needs and opinions when required. You tend to be a reliable and trustworthy friend, and people appreciate your supportive nature. At times, you might put others first, but you also understand the importance of balancing kindness with setting healthy boundaries to ensure your own well-being.`;
+          templatePath = path.join(
+            __dirname,
+            "personality-descriptions/a-60.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
         } else if (percentage >= 40) {
-          description = `You have a balanced level of agreeableness, which means you are generally cooperative and considerate, but you're also capable of being assertive when the situation requires it. You can be empathetic and understanding towards others, yet you're not overly accommodating or overly concerned with avoiding conflict. You value positive relationships but are more comfortable speaking up for yourself and expressing your opinions, even if they may sometimes differ from others. While you tend to get along well with people, you also maintain a sense of independence and are willing to stand your ground when needed. You strike a healthy balance between being supportive and maintaining your own boundaries, and you're not afraid to voice your needs or preferences, especially when it’s important to do so.`;
+          templatePath = path.join(
+            __dirname,
+            "personality-descriptions/a-40.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
         } else if (percentage >= 20) {
-          description = `You have a relatively low level of agreeableness, which means you tend to prioritize your own needs and opinions over maintaining harmony or pleasing others. While you're not necessarily unkind, you may be more straightforward, assertive, or even blunt in your interactions. You value honesty and directness, often feeling that it's more important to express your true feelings rather than accommodate others’ desires. You may find it difficult to avoid conflict and are not afraid to stand up for yourself, even if it means creating tension. This trait allows you to be independent and self-sufficient, but it can also lead to occasional misunderstandings with those who expect more diplomacy or sensitivity. You may not seek to please everyone, focusing more on your own goals and perspectives than on keeping the peace in relationships.`;
+          templatePath = path.join(
+            __dirname,
+            "personality-descriptions/a-20.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
         } else {
-          description = `You have a very low level of agreeableness, which means you tend to be more self-focused and direct in your interactions. You are less concerned with the feelings or opinions of others and prioritize your own goals, beliefs, and needs. While this can make you highly independent and confident in your decisions, it may also result in a tendency to challenge or disregard social norms and expectations. You are likely less inclined to seek harmony or avoid conflict, and you might express your thoughts and feelings in a blunt or unapologetic way. This can sometimes lead to misunderstandings or friction with others, as you may come across as insensitive or indifferent to their concerns. While you value your own perspective above others’, it’s important to recognize that this approach can limit the depth of your relationships or the support you receive from others.`;
+          templatePath = path.join(__dirname, "career-descriptions/a-10.html");
+          description = fs.readFileSync(templatePath, "utf8");
         }
         break;
       case "neuroticism":
         if (percentage >= 80) {
-          description = `You have a very high level of neuroticism, which means you experience intense emotional reactions to stress, anxiety, and negative situations. Your feelings tend to be more volatile, and you may frequently feel overwhelmed by worry, frustration, or sadness. You are highly sensitive to stressors and may find it difficult to cope with challenges without feeling anxious or discouraged. Your mood can fluctuate rapidly, and you may often find yourself ruminating over past events or worrying about the future. This heightened emotional reactivity can make it harder to bounce back from setbacks, and you might struggle to maintain a sense of calm in stressful situations. While your emotional depth allows you to experience strong feelings, it’s important to recognize that this sensitivity can sometimes lead to unnecessary stress or difficulty in managing your emotions. Finding ways to build emotional resilience and manage anxiety can help you navigate life with greater stability.`;
+          templatePath = path.join(
+            __dirname,
+            "personality-descriptions/n-80.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
         } else if (percentage >= 60) {
-          description = `You have a moderately high level of neuroticism, meaning you tend to experience emotional ups and downs more frequently than others. While you may not be overwhelmed by emotions as often, you are still sensitive to stress, anxiety, and negative feelings. You might find yourself worrying about various aspects of life, and at times, these worries can feel intense. Stressful situations can trigger feelings of insecurity or frustration, and you may sometimes overthink challenges or setbacks. However, your emotional responses are generally manageable, and you are able to regain stability with some effort. While you may experience occasional mood swings or anxiety, you also have the ability to reflect on your emotions and find ways to cope. Being aware of your emotional triggers and developing strategies to manage stress can help you maintain a more balanced outlook.`;
+          templatePath = path.join(
+            __dirname,
+            "personality-descriptions/n-60.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
         } else if (percentage >= 40) {
-          description = `You have a balanced level of neuroticism, meaning you experience emotional ups and downs, but they tend to be moderate and manageable. While you may occasionally feel anxious, stressed, or frustrated, these emotions are generally not overwhelming and you are able to recover fairly quickly. You can be sensitive to negative situations, but you usually handle them with a more grounded perspective, and you are able to stay calm in most circumstances. You may occasionally worry or feel insecure, but it tends to be more situational rather than a constant state of mind. Your ability to reflect on your emotions and approach challenges in a logical way helps you maintain balance, even when things don’t go as planned. While you’re not immune to stress, you’re generally able to keep it in check and avoid letting it affect your overall well-being.`;
+          templatePath = path.join(
+            __dirname,
+            "personality-descriptions/n-40.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
         } else if (percentage >= 20) {
-          description = `You have a relatively low level of neuroticism, meaning you tend to remain calm and composed even in stressful situations. Emotional ups and downs are less frequent for you, and you are generally able to manage negative emotions like anxiety, worry, or frustration with ease. You are less sensitive to stress and more resilient in the face of challenges, often approaching difficulties with a level-headed and rational mindset. While you may experience occasional feelings of insecurity or doubt, these tend to be short-lived and don't significantly impact your overall emotional state. Your ability to maintain emotional stability and stay optimistic in tough situations allows you to navigate life with confidence and a positive outlook. You are likely to be perceived as calm, collected, and self-assured by those around you.`;
+          templatePath = path.join(
+            __dirname,
+            "personality-descriptions/n-20.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
         } else {
-          description = `You have a very low level of neuroticism, meaning you are highly emotionally stable and rarely experience intense negative emotions such as anxiety, worry, or frustration. You are generally calm, composed, and resilient, even in stressful situations, and you tend to bounce back quickly from setbacks. Emotional turmoil and stressors have minimal impact on you, and you approach challenges with a sense of confidence and ease. Your ability to remain steady and unaffected by negative emotions allows you to maintain a positive and optimistic outlook on life. You are rarely troubled by self-doubt or insecurity and tend to stay focused and grounded, regardless of the external circumstances. This emotional stability makes you someone who is not easily rattled and can handle high-pressure situations with grace.`;
+          templatePath = path.join(
+            __dirname,
+            "personality-descriptions/n-10.html"
+          );
+          description = fs.readFileSync(templatePath, "utf8");
         }
         break;
       default:
         description = "Invalid";
+        care = "";
     }
     return description;
   }
@@ -1448,11 +1648,6 @@ app.get("/calculateScore", (req, res) => {
     agreeableness: agreeablenessScore,
     neuroticism: neuroticismScore,
   });
-
-  /* writeStream.on("error", (err) => {
-    console.log(err);
-    res.status(500).json({ error: "Error generating PDF" });
-  });*/
 });
 
 app.post("/sendResultsAsEmail", (req, res) => {
@@ -1527,7 +1722,6 @@ app.post("/updateCompletedTestField", authMiddleware, async (req, res) => {
 app.post("/checkout", authMiddleware, async (req, res) => {
   const userId = req.user.id;
   const email = req.user.email;
-  console.log(email);
 
   connection.query(
     `SELECT has_completed_career_test FROM tbl_users WHERE id = ?`,
@@ -1588,6 +1782,7 @@ app.post("/updateIsPaidField", authMiddleware, async (req, res) => {
     }
   );
 });
+
 /*passport.use(
   "google",
   new GoogleStrategy(
