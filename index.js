@@ -677,7 +677,7 @@ env.config();
 const jwtSecretKey = process.env.JWT_SECRET_KEY;
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-const saltRounds = process.env.SALTROUNDS;
+const saltRounds = 10;
 
 const connection = mysql.createConnection({
   host: process.env.MYSQL_HOST,
@@ -698,13 +698,19 @@ app.use(cookieParser());
 
 const authMiddleware = (req, res, next) => {
   const token = req.cookies.authToken;
-
+  if (!token) {
+    return res.status(401).json({
+      TokenExpired: true,
+      message: "Session expired. Please log in again.",
+    });
+  }
   jwt.verify(token, jwtSecretKey, (err, user) => {
     if (err) {
       if (err.name === "TokenExpiredError") {
-        return res
-          .status(401)
-          .json({ message: "Session expired. Please log in again." }); // Unauthorized (token expired)
+        return res.status(401).json({
+          TokenExpired: true,
+          message: "Session expired. Please log in again.",
+        }); // Unauthorized (token expired)
       }
       return res.status(403).json({ message: "Invalid Token" }); // Forbidden (invalid token)
     }
@@ -730,7 +736,7 @@ const authMiddleware = (req, res, next) => {
 app.get("/protected", authMiddleware, (req, res) => {
   res.json({
     message: "This is a protected route",
-    user: { name: req.user.name, is_paid: req.user.is_paid },
+    user: { name: req.user.name },
   });
 });
 
@@ -793,16 +799,17 @@ app.post("/login", async (req, res) => {
                     name: user.name,
                     email: user.email,
                     is_paid: user.is_paid,
+                    has_completed_career_test: user.has_completed_career_test,
                   },
                   jwtSecretKey,
-                  { expiresIn: "2h" }
+                  { expiresIn: "1h" }
                 );
                 res.cookie("authToken", token, {
                   httpOnly: true,
                   secure: process.env.NODE_ENV === "production", // ✅ only true in prod
                   sameSite:
                     process.env.NODE_ENV === "production" ? "None" : "Lax",
-                  maxAge: 3600000,
+                  maxAge: 360000,
                 });
 
                 const userDetails = {
@@ -857,7 +864,7 @@ app.post("/forgotPassword", async (req, res) => {
 
 app.post("/saveResults", authMiddleware, async (req, res) => {
   const userId = req.user.id;
-
+  const { questionId, testResults, testType } = req.body;
   await connection.query(
     "INSERT INTO tbl_testresults(user_id,question_id, test_result, test_type) VALUES(?, ?, ?,?)",
     [userId, questionId, testResults, testType]
@@ -869,7 +876,24 @@ app.post("/getTestResults", authMiddleware, async (req, res) => {
   try {
     const userId = req.user.id;
     const isPaid = req.user.is_paid;
+    const hasCompletedCareerTest = req.user.has_completed_career_test;
     const { testType } = req.body;
+    if (
+      testType === "Career Test" &&
+      hasCompletedCareerTest === 0 &&
+      isPaid === 0
+    ) {
+      return res
+        .status(403)
+        .json({ message: "Payment req after test completion" });
+    } else if (
+      testType === "Career Test" &&
+      hasCompletedCareerTest === 1 &&
+      isPaid === 0
+    ) {
+      return res.json({ showPaymentModal: true });
+    }
+
     if (isPaid === 1 && testType === "Career Test") {
       await connection.query(
         "SELECT * FROM tbl_testresults WHERE user_id = ? and test_type=?",
