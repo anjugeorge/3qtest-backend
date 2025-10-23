@@ -4974,6 +4974,8 @@ const connection = mysql.createConnection({
   database: process.env.MYSQL_DATABASE,
 });
 
+const SMTPUser = process.env.SMTP_USER;
+const SMTPPass = process.env.SMTP_PASS;
 app.use(
   cors({
     origin: "http://localhost:5173", // your frontend URL
@@ -6518,13 +6520,13 @@ app.post(
       port: 465, // secure port
       secure: true,
       auth: {
-        user: "apssapss743@gmail.com", // Replace with your email
-        pass: "ckjivlfpmzdbbnuj",
+        user: SMTPUser,
+        pass: SMTPPass,
       },
     });
 
     const mailOptions = {
-      from: "apssapss743@gmail.com",
+      from: SMTPUser,
       to: email,
       subject: "3QTest - Career Assessment Result",
       text: `Hi ${userName},\n\nPlease find your career assessment test report attached.`,
