@@ -23,6 +23,7 @@ import {
 import { type } from "os";
 import { htmlToText } from "html-to-text";
 import multer from "multer";
+import { title } from "process";
 
 export const Questions = [
   {
@@ -177,38 +178,38 @@ export const Questions = [
   },
   {
     id: 26,
-    question: "Perseveres until the task is finished",
-    trait: "Conscientiousness",
-    facet: "positive",
+    question: "Remains calm in tense situations",
+    trait: "Neuroticism",
+    facet: "negative",
   },
   {
     id: 27,
-    question: "Can be moody",
-    trait: "Neuroticism",
-    facet: "positive",
-  },
-  {
-    id: 28,
-    question: "Values artistic, aesthetic experiences",
+    question: "Prefers variety to routine",
     trait: "Openness",
     facet: "positive",
   },
   {
-    id: 29,
-    question: "Is sometimes shy, inhibited",
+    id: 28,
+    question: "Is full of life and vigor",
     trait: "Extraversion",
-    facet: "negative",
+    facet: "positive",
   },
   {
-    id: 30,
-    question: "Is considerate and kind to almost everyone",
+    id: 29,
+    question: "Is respectful, treats others with courtesy",
     trait: "Agreeableness",
     facet: "positive",
   },
   {
-    id: 31,
-    question: "Does things efficiently",
+    id: 30,
+    question: "Tends to be methodical and organized",
     trait: "Conscientiousness",
+    facet: "positive",
+  },
+  {
+    id: 31,
+    question: "Gets nervous easily",
+    trait: "Neuroticism",
     facet: "positive",
   },
   {
@@ -245,7 +246,7 @@ export const Questions = [
     id: 37,
     question: "Is reserved",
     trait: "Extraversion",
-    facet: "positive",
+    facet: "negative",
   },
   {
     id: 38,
@@ -277,7 +278,6 @@ export const Questions = [
     trait: "Extraversion",
     facet: "positive",
   },
-  // New Questions Added:
   {
     id: 43,
     question: "Has a strong sense of responsibility",
@@ -993,7 +993,434 @@ export const CareerQuestions = [
 
 export const careerMapping = [
   {
-    combination: "RIA",
+    type: "R",
+    title: "The Ultimate Doer",
+    typeDesc:
+      "When very upset, they can feel as if their control has been taken away from them and this triggers their fight-or-flight response. This occurs even with things such as a bad grade or losing an opportunity for advancement at work.",
+
+    careerDesc:
+      "They may keep it inside and slowly build resentment against those who had caused the problem. They are known as practical and diligent workers. If they are forced to change jobs or take on a new task, it will be approached with the same efficient manner as their current job duties. Because of this, they can be very easy to work with and usually do not require supervision. They may not recognize when to stop working, until they become completely exhausted.",
+    powers: [
+      {
+        title: "Analytical",
+        desc: "You have a great taste of analysing anything and everything that could range from research data to behaviour of people. This could make you discover unexpected patterns and connections that others might miss.",
+      },
+      {
+        title: "Original",
+        desc: "You could produce incredible innovations due to your creative ideas.",
+      },
+      {
+        title: "Open-Minded",
+        desc: "You are guided by curiosity and an immense drive to learn whatever possible.",
+      },
+      {
+        title: "Curious",
+        desc: "You try to pursue new interests and hobbies with the deep desire of learning.",
+      },
+      {
+        title: "Objective",
+        desc: "You thrive to be unbiased and stand against misinformation even when it isn’t easy to do so.",
+      },
+    ],
+    weaknesses: [
+      {
+        title: "Disconnected",
+        desc: "You might get lost in thoughts and when switch your mind back to the current context, the conversation might have moved on. This would make you feel disconnected.",
+      },
+      {
+        title: "Insensitive",
+        desc: "At times, you might feel rationality is the primary element to a better and happier world. Hence you might become insensitive to values as emotions, compassion and tradition.",
+      },
+      {
+        title: "Dissatisfied",
+        desc: "You are always on the search of improvements and new approaches. This could be overwhelming.",
+      },
+      {
+        title: "Impatient",
+        desc: "You might feel dismissive when your conversation partner do not follow you in your expected pace.",
+      },
+      {
+        title: "Perfectionist",
+        desc: "Your quest for perfection could drive you to give up on projects that don’t match the ideal vision in your mind.",
+      },
+    ],
+    workplaceHabits: {
+      title: "Workplace Habits",
+      desc: "They may become overly involved with their work to the extent that they forget or ignore important things in their life, such as family, relationships and/or personal needs. They usually see these 'distractions' only when they are forced out of their normal routine. They can get very involved in projects that interest them, especially ones that reflect their personal interests. They can get so wrapped up in these projects that they isolate themselves from others and their other obligations to the point of neglecting them. They spend a lot of time trying to perfect their work, which makes it one of their main concerns. They usually do not try to rush through it just to get it done. They are known for being very thorough workers, but can be quite demanding on themselves and others if they are not careful.",
+    },
+    careerPaths: {
+      title: "Career Paths",
+      desc: "The main and most obvious career path is the military. Although very different from one another, all social types like to be in charge or at least feel important and necessary, making them well suited for this profession. There are other professions that could be suitable as well; however, since people of this type do get bored easily, it would be best if they were allowed to keep changing jobs or departments, so as to avoid any potential problems with stagnancy. Since people of this type are very independent and do not have any issues making decisions on their own, it should come as no surprise that managerial positions would suit them just fine. However, depending on the line of business one is in, it might be a bit more difficult to find positions where one has much freedom when it comes to decision making. In these cases, they should look for positions that involve communication with people.",
+    },
+    seekingNewChallenges: {
+      title: "Seeking New Challenges",
+      desc: "The Realistic personality type is known for their practicality and efficiency when it comes to problem solving. They may solve the problem quickly, probably without emotion or thinking of future consequences. If they are unable to solve the problems they usually put them off until something happens that forces them to deal with it. They are usually very practical, logical people. When faced with a problem or even everyday situations they tend to focus on the facts rather than being subjective. They are more concerned about finding practical solutions to problems, rather than trying to understand why something happened. They have no desire for change and this can cause them some issues when forced into new experiences that require them to try something new or spend money they hadn't planned to.",
+    },
+    whatToImprove: {
+      title: "Ways to Enhance Your Strengths",
+      desc: "You need to learn to accept routine in your home lives, which will enable you to spend time with your loved ones. You need to pay more attention to your family life as you need support from your loved ones just as much as the others do. At times, they may seem quiet or distant, but that’s not true. It is best if you aren’t allowed to keep changing jobs or departments too often because this could lead to stagnation or stagnation within a field.",
+    },
+  },
+  {
+    type: "I",
+    title: "The Analytical Genius",
+
+    typeDesc:
+      "They prefer working alone, so they do not have to worry about pleasing anyone but themselves. They prize their autonomy and independence highly, while also needing little encouragement or support from others because of their self-sufficiency. Investigative personalities are very efficient individuals who focus on getting things done with speed and accuracy to meet their high standards. They are very good at acquiring knowledge and information, but not so skilled in applying it practically to real-life situations or understanding how other people may need to use that information. They tend to be better at the acquisition of facts than they are at getting along with people, though they can sometimes surprise others by being highly courteous and considerate. They prefer not to draw attention to themselves and so they will usually be low-key, reserved individuals who may live quietly without much fanfare. They do not like small talk or socializing for its own sake, as it feels too time-consuming and unnecessary to them.",
+
+    careerDesc:
+      "They tend to be good listeners but can be very private and reserved, though they can also be highly blunt and outspoken on the rare occasions that they choose to express themselves. They also do not like spending too much time in social circles where they feel no new information will be forthcoming; this is because the investigative personality is essentially a learning machine that needs to constantly acquire new information. If they are not making progress in their lives or learning anything new, they can easily become bored and restless, which leads them to begin looking for more stimulating opportunities elsewhere. They may be prone to excessive shyness or social anxiety at times because of their dislike of small talk, but they can also be very friendly and helpful if others approach them on a topic that genuinely interests them. However, they do not like general chit-chat and often find it a complete waste of their time because they would rather use those moments to think about something else or acquire new information from someone who is knowledgeable in one of their favorite subjects.",
+
+    powers: [
+      {
+        title: "Perfectionism",
+        desc: "Perfectionism is the primary goal for you in any aspect of life. You wouldn’t mind quitting projects that don’t match your ideal vision.",
+      },
+      {
+        title: "Honest",
+        desc: "You favor managing the reality of situations with simple honesty rather than reassuring lies.",
+      },
+      {
+        title: "Strong Willed and Dutiful",
+        desc: "You are focused on your goal and determined to accomplish it.",
+      },
+      {
+        title: "Very Responsible",
+        desc: "For you, promise is primary. You would go to any extent to deliver the committed results.",
+      },
+      {
+        title: "Calm and Practical",
+        desc: "You tend to take decisions effectively rather than mixing them with emotions or empathy.",
+      },
+      {
+        title: "Create and Enforce Order",
+        desc: "You don’t tolerate anything that disrupts the integrity of established guidelines and rules.",
+      },
+    ],
+    weaknesses: [
+      {
+        title: "Stubborn",
+        desc: "Your factual-based decision making leads to trouble in accepting any mistake from your side.",
+      },
+      {
+        title: "Insensitive",
+        desc: "Unintentionally you might hurt others in the path of establishing honesty to be the best policy.",
+      },
+      {
+        title: "Always by the Book",
+        desc: "You are reluctant to think differently from the already set rules and regulations even if the downside is minimal.",
+      },
+      {
+        title: "Judgmental",
+        desc: "You cannot respect people who do not agree with factual statements.",
+      },
+    ],
+    workplaceHabits: {
+      title: "Workplace Habits",
+      desc: "These personalities tend to work better alone, where they can focus on their tasks without interruption. They do not like having to follow orders or instructions from others, as this limits their ability to perform efficiently since someone else may have a different way of doing things that may not be as good as the way an investigative personality would have done it. They are excellent at gathering facts, especially when they are personally interested in the topic. They are usually better at problem solving than they are at team work because investigative personalities prefer to concentrate on one task or project that they can focus all of their attention on. If an investigative personality is focused on something else, it means that there may be a problem with that project or that something else has failed.",
+    },
+    careerPaths: {
+      title: "Career Paths",
+      desc: "Investigative personalities are not naturally good at team work, so professions that require teamwork do not suit them well at all. They prefer jobs where they can focus on their own tasks and perform them independently. They are not naturally good at marketing, advertising or selling their work because they are more interested in the product itself rather than its outward appearance. Hence some of the ideal jobs for this personality type are scientist, researcher, investigator, accountant, librarian, detective, intelligence analyst, historian, journalist, and computational linguist.",
+    },
+    seekingNewChallenges: {
+      title: "Seeking New Challenges",
+      desc: "Some investigative personalities are satisfied with their jobs, while others are always looking for new projects or challenges to work on. If they have been working in a field for a long time, they may begin to lose interest because the excitement of learning something new is gone. If an investigative personality feels stuck at work or believes that he or she has exhausted all of the possibilities, they may begin to look for a new opportunity elsewhere. A fresh challenge will help them to stay motivated and focused on their work. You should try and learn how to socialize and talk more with others because this can be beneficial at work and in building professional relationships. You should seek out roles that allow you to complete tasks independently, and if you work in a team, you should try and overlook your dislike of teamwork and learn how to cooperate with others who will be depending on you.",
+    },
+  },
+  {
+    type: "A",
+    title: "The Master Creator",
+    careerDesc:
+      "Entertainers possess a strong aesthetic style. They have an eye for fashion, that could range from outfits to a well-designed home. Being inherently curious, they love to explore new styles and exhibit their personal tastes around them. They appreciate beauty and enjoy variety. They like to discover interesting and unusual people, colors, textures, and sounds. It's never difficult for Entertainers to make new friends. They have an exceptional style of keeping things moving by a combination of blunt truth and disarming openness. They sincerely care about their friends and make efforts to create group experiences that everyone would enjoy. Consequently, they also get deeply distressed by conflicts that end these relationships. With age, they improve in respecting other personality types. They tend to go too far with risky and careless behavior and try to include others along this ride. They are quite sensitive, and rejecting their pastimes can be taken personally, ending friendships abruptly. They don’t give time for being lectured.",
+
+    typeDesc:
+      "Entertainers become so focused on immediate pleasures that they neglect duties and responsibilities that make these luxuries possible. Repetitive tasks and complex analysis are not their cup of tea. They would rather rely on their close ones to achieve these tasks. Hence, it is very important for Entertainers to challenge themselves to keep track of their long-term goals. Being poor planners, they are inclined to leap at opportunities rather than planning out long-term goals. This could mean they would discover certain activities to be unaffordable for them. Credit cards, therefore, can be a great source of danger for such a personality.",
+    powers: [
+      {
+        title: "Bold",
+        desc: "They possess the courage to step out of their comfort zone and discover every possible experience.",
+      },
+      {
+        title: "Original",
+        desc: "They love to experiment with new styles, standing out from the crowd and placing tradition and expectations second.",
+      },
+      {
+        title: "Aesthetics and Showmanship",
+        desc: "Entertainers inject artistic creativity into their words and actions. Every day is a performance, and Entertainers love to put on a show.",
+      },
+      {
+        title: "Practical",
+        desc: "They prefer to put their hands to work rather than thinking about endless 'what-ifs'.",
+      },
+      {
+        title: "Observant",
+        desc: "They are champions at noticing real, tangible things and subtle changes around them.",
+      },
+      {
+        title: "Excellent People Skills",
+        desc: "For people with this personality type, happiness and satisfaction come from the time they spend with people they enjoy being around.",
+      },
+    ],
+
+    weaknesses: [
+      {
+        title: "Sensitive",
+        desc: "They can be very vulnerable to criticism and may react in unexpectedly negative ways.",
+      },
+      {
+        title: "Conflict-Averse",
+        desc: "Entertainers often avoid conflict entirely, saying or doing whatever is needed to escape uncomfortable situations.",
+      },
+      {
+        title: "Easily Bored",
+        desc: "Risky behavior, self-indulgence, and prioritizing the pleasures of the moment over long-term plans are common tendencies.",
+      },
+      {
+        title: "Poor Long-Term Planners",
+        desc: "They live in the moment and seldom plan ahead, believing that things can change anytime.",
+      },
+      {
+        title: "Unfocused",
+        desc: "Anything requiring long-term dedication and consistency can be particularly challenging for Entertainers.",
+      },
+    ],
+
+    careerPaths: {
+      title: "Career Paths",
+      desc: "These individuals prefer working in unstructured environments where they can use their creativity and imagination. They maintain focus and enthusiasm throughout their projects and solve problems by creating something new. They value novelty above all and enjoy engaging in intellectual and philosophical discussions that offer diverse perspectives. They do not get discouraged when others oppose their ideas. Activities that engage all five senses are their favorite zone.",
+    },
+
+    workplaceHabits: {
+      title: "Workplace Habits",
+      desc: "Entertainers strive to make the workplace engaging and enjoyable. They easily get their team on board with practical tasks using their relaxed and social attitude. This personality type performs best in dynamic and fast-paced environments. Their success depends greatly on the degree of freedom they are given. In subordinate roles, they love implementing new ideas and dislike repetitive work, which can make them prone to quitting if they lack independence. As managers, they enjoy conceptualizing and executing new methods. Their ability to relate to others and think on their feet makes them inspiring leaders.",
+    },
+
+    idealFuture: {
+      title: "Ideal Future",
+      desc: "Entertainers seek excitement, stimulation, and novelty. Some suitable professions include event planner, sales representative, trip planner, or tour guide. They can also excel as counselors, social workers, personal coaches, or consultants because they genuinely enjoy interacting with people. Their strength lies in making others happy even in stressful situations. Entertainers also make great medical professionals due to their passion and resourcefulness. Their creative energy can lead to success in music, fashion, photography, and interior design. While moving through life, it's important for them to maintain focus and plan for the long term. They should avoid overindulging in momentary pleasures that may lead to bad habits. Accepting constructive feedback and addressing conflicts openly can strengthen relationships. By recognizing their weaknesses and working to improve, Entertainers can fully capture the joy and happiness life offers.",
+    },
+  },
+
+  {
+    type: "S",
+    title: "The Heartfelt Helper",
+    careerDesc:
+      "There are different types of social personalities, and each has its own interests and talents. For example, famous entertainers and politicians are often extroverted types — very expressive and good at communicating. On the other hand, some famous scientists are introverts who may prefer solitude but possess great curiosity and deep intellectual passion. They earn respect for their talents, even though they are not socially active. Interestingly, many entertainers and actors also possess introverted traits.",
+
+    typeDesc:
+      "Even though people with social personalities are caring and attentive to others, they often do not form deep relationships. If someone’s interest or talent differs from theirs, they may find it difficult to understand, despite their kind-heartedness. Since their close circle is limited, relationships can sometimes become more complicated. In everyday life, they appreciate elegance and beauty. They often dress stylishly, arrange their living spaces creatively, and have excellent taste. People of this type love novelty and uniqueness and often have a good sense of humor, making them pleasant company.",
+    powers: [
+      {
+        title: "Supportive",
+        desc: "You always share your knowledge, experience, time, and energy with anyone who needs it.",
+      },
+      {
+        title: "Reliable and Patient",
+        desc: "You use a steady approach to achieve goals and ensure the highest standards are met.",
+      },
+      {
+        title: "Imaginative and Observant",
+        desc: "You perform tasks in a fascinating and inspiring fashion while noticing important details others may miss.",
+      },
+      {
+        title: "Enthusiastic",
+        desc: "You go to great lengths to make a positive difference in other people’s lives.",
+      },
+      {
+        title: "Loyal and Hardworking",
+        desc: "You develop strong emotional attachments to the ideas and organizations you work with.",
+      },
+    ],
+
+    weaknesses: [
+      {
+        title: "Humble and Shy",
+        desc: "You tend to remain quiet about your thoughts and rarely seek credit for your contributions.",
+      },
+      {
+        title: "Take Things Too Personally",
+        desc: "You sometimes struggle to separate personal feelings from professional criticism, which can affect your attitude.",
+      },
+      {
+        title: "Repress Their Feelings",
+        desc: "You are very sensitive and may suppress emotions, leading to stress and frustration.",
+      },
+      {
+        title: "Overload Yourself",
+        desc: "You push yourself to meet perfectionist standards and strong duties, often leading to burnout.",
+      },
+      {
+        title: "Reluctant to Change",
+        desc: "You value tradition and history, making it hard to adapt to new situations or ideas.",
+      },
+      {
+        title: "Altruistic",
+        desc: "You tend to help others even when your own problems remain unresolved.",
+      },
+    ],
+
+    workplaceHabits: {
+      title: "Workplace Habits",
+      desc: "A study from the University of Tartu in Estonia found that people with social personalities are more likely to work in office environments, while solitary individuals prefer independent, creative work such as writing or research. Extroverts thrive in group-oriented tasks and enjoy collaboration, while introverts are more reserved and thoughtful when evaluating opposing ideas. Introverts also prefer private, quiet workspaces that allow for deep concentration.",
+    },
+
+    careerPaths: {
+      title: "Career Paths",
+      desc: "People with social personalities are often described as 'trouble shooters' because they strive to take leadership roles and succeed where others have failed. They frequently pursue careers in business, management, or politics and can make successful entrepreneurs. They consider others’ feelings when making decisions, enabling them to cooperate well in teams. Many actors and entertainers also belong to this type — they enjoy connecting with others, fostering harmony, and avoiding unnecessary attention.",
+    },
+  },
+  {
+    type: "E",
+    title: "The Charismatic Leader",
+    careerDesc:
+      "They are very particular about how things should be done and what people should do when faced with difficult decisions. They see things from a practical and pragmatic perspective, which can make them seem harsh or unemotional when others struggle to decide. They dislike inefficiency or delays and feel frustrated when things move too slowly.",
+
+    typeDesc:
+      "These individuals have a natural drive to motivate others into action and achieve tangible results. However, they may unintentionally hurt people’s feelings by being too direct or impatient. Despite these challenges, their leadership and determination often inspire those around them to perform at their best.",
+    powers: [
+      {
+        title: "Bold",
+        desc: "You are unafraid to push boundaries and turn bold ideas into reality.",
+      },
+      {
+        title: "Rational and Practical",
+        desc: "You focus on implementing effective ideas rather than getting stuck in endless discussions.",
+      },
+      {
+        title: "Original",
+        desc: "You bring unique and creative solutions into action, setting yourself apart from others.",
+      },
+      {
+        title: "Perceptive",
+        desc: "You keenly notice changes and use your observations to connect and collaborate effectively.",
+      },
+      {
+        title: "Direct",
+        desc: "You are frank and straightforward, preferring factual discussions over vague talk.",
+      },
+      {
+        title: "Sociable",
+        desc: "You naturally build strong connections and often emerge as a confident, charismatic leader.",
+      },
+    ],
+
+    weaknesses: [
+      {
+        title: "Insensitive",
+        desc: "You prioritize logic and results over emotions, which can make it hard to express or acknowledge feelings.",
+      },
+      {
+        title: "Impatient",
+        desc: "You dislike waiting for others to match your pace or efficiency, which can create friction.",
+      },
+      {
+        title: "Risk-prone",
+        desc: "You often dive into risky or challenging situations to combat boredom or stagnation.",
+      },
+      {
+        title: "Unstructured",
+        desc: "You may ignore formal rules or expectations in your rush to get results, sometimes leading to conflict.",
+      },
+      {
+        title: "Might Miss the Bigger Picture",
+        desc: "You can get caught up perfecting details, overlooking how parts fit into the larger goal.",
+      },
+      {
+        title: "Defiant",
+        desc: "You dislike restrictions and find it difficult to thrive in rigid or highly structured environments.",
+      },
+    ],
+
+    workplaceHabits: {
+      title: "Workplace Habits",
+      desc: "They are flexible and highly driven workers who prefer efficiency and independence. They dislike wasting time on low-quality tasks and thrive when given creative freedom. Enterprising individuals perform best with clearly defined goals and deadlines. They delegate effectively, organize time well, and handle both complex and tedious work when necessary. They prefer direct, practical communication and autonomy over micromanagement.",
+    },
+    seekingNewChallenges: {
+      title: "Seeking New Challenges",
+
+      desc: "These individuals constantly seek new opportunities and challenges, finding fulfillment in achieving the seemingly impossible. They are motivated by ambition and innovation, preferring to surround themselves with equally driven people. A supportive network helps them maintain balance and confidence. Without it, they may hesitate to take risks or pursue major goals.",
+    },
+    whatYouCouldImprove: {
+      title: "Ways to Enhance Your Strengths",
+
+      desc: "Focus on developing empathy and emotional awareness. Understand that your directness may unintentionally hurt others, and try to approach sensitive situations with care. Avoid overloading yourself with multiple goals at once — prioritize and delegate effectively. Reflect regularly through journaling to clarify your thoughts and align your goals, helping you maintain both focus and emotional balance.",
+    },
+  },
+  {
+    type: "C",
+    title: "The Chief Organizer",
+    careerDesc:
+      "They prefer to follow their own personal interests rather than work as part of a team; they would like others to be equally committed but usually lose interest quickly, which can lead to frustration with those who don't share their enthusiasm. They will often begin things enthusiastically with high expectations of others, but will lose motivation and enthusiasm just as quickly if they don't see a similar commitment from others. They can dismiss what they don't want to do - whether that's making the bed or paying bills - by pretending it isn't their responsibility or that they are too busy doing something else at the time; this tendency can lead to them being unreliable when it comes to their commitments or responsibilities. They have a hard time accepting responsibility for tasks which are dull, unpleasant or boring and would rather pass the buck onto someone else if they can get away with it. It is difficult to rely on them in areas where commitment is needed over an extended period of time.",
+
+    typeDesc:
+      "Their creativity and imagination allows Organisers to come up with new ways of doing things, however this can make them impatient with those less inventive or creative than they are; their need for independence means they don't like to be told what to do even when it's in their best interest. Organisers will happily try out many different ways of doing something and will feel undervalued if others don't recognise their creative input. They also need a good degree of independence and autonomy to be happy, and like to do things in their own way rather than someone else's. They can seem unpredictable; while they make many plans they may not follow through with them - for instance, making detailed arrangements to see someone or do something but then changing their plans for no apparent reason. They are quite open about how they feel and may say yes to things one minute and change their mind the next if they suddenly feel differently; this can leave others confused as to what Organisers really want.",
+    powers: [
+      {
+        title: "Receptive",
+        desc: "You accept that its equally important to listen to other’s emotions",
+      },
+      {
+        title: "Reliable",
+        desc: "You will encourage and stand by other’s dreams and responsibilities",
+      },
+      {
+        title: "Passionate",
+        desc: "You always find time in pursuing your interests and hobbies amidst any hectic situation",
+      },
+      {
+        title: "Altruistic",
+        desc: "You always thrive to bring a positive change  to the society",
+      },
+      {
+        title: "Charismatic",
+        desc: "You are always focused on your goal and be an idol of determination and inspiration",
+      },
+    ],
+
+    weaknesses: [
+      {
+        title: "Unrealistic",
+        desc: "You don’t consider the practicality of correcting every wrong to right",
+      },
+      {
+        title: "Overly Idealistic",
+        desc: "You expect others also to be aware and practice of fundamental moral principles",
+      },
+      {
+        title: "Condescending",
+        desc: "You try to spread values to people but not always end up convincing",
+      },
+      {
+        title: "Intense",
+        desc: "You try to forcefully implement improvements on others which they may not agree of",
+      },
+      {
+        title: "Overly Empathetic",
+        desc: "You might become emotionally exhausted as you are so compassionate and consider others problems as your own",
+      },
+    ],
+
+    careerPaths: {
+      title: "Career Paths",
+      desc: "The Conventional personality type enjoys structure and order in their tasks. They are often drawn to working with others, and this means they may find satisfaction in roles such as: team manager, head of staff or section chief; customer service representative; warehouse operative; bookkeeper; accountant. People with Conventional personality type tend to enjoy the active and social atmosphere of bar, club and restaurant management; human resources; event planner; marketing manager; sports or fitness instructor.",
+    },
+
+    workplaceHabits: {
+      title: "Workplace Habits",
+      desc: "They may not be very concerned with the quality of their work or completing a task to a high level; they will do enough to ensure that the essential requirements are fulfilled, however Organisers often make careless mistakes and don't pay attention to detail which can frustrate others who need accuracy and precision. Organisers complete tasks at a reasonable standard but don't usually go the extra mile, which can lead to frustration in others who are more exacting. The Organiser's need for freedom means they are easily distracted or interrupted when working on something; they may be able to focus for a while before their mind starts to wander onto other things. Organisers find it difficult to work on routine, mundane tasks for long periods of time, which means they may be less productive than others who are willing to commit and persevere.",
+    },
+
+    seekingNewChallenges: {
+      title: "Seeking New Challenges",
+      desc: "Organisers like to be in control of themselves and any situation they are in; their fear of failure or making mistakes can lead them to procrastinate, avoid new experiences or simply refuse to do something unless someone else will do it with them. As a result they may miss out on opportunities for advancement. An Organiser's need for control and independence can lead them to become frustrated with those who don't seem as driven as they are, and to miss out on opportunities by holding back from trying new things. They may also make detailed plans for the future which they will easily abandon if something more exciting turns up; this tendency can be like a 'grass is greener on the other side' approach, where Organisers jump from one thing to another never quite satisfied with what they have or are doing.",
+    },
+  },
+];
+
+/*export const careerMapping = [
+  {
+    combination: "R",
     fieldOfStudy:
       "Engineering, Industrial Design, Product Development, Architecture, Applied Sciences",
     career:
@@ -4936,6 +5363,45 @@ export const careerMapping = [
 5. May underestimate creative solutions`,
     ],
   },
+];*/
+
+export const careerDescriptions = [
+  {
+    type: "R",
+    fullName: "Realistic",
+    careerDesc:
+      "You are an efficient and practical problem solver. You tend to be very hardworking. You are very generous especially when someone very close to you needs your help. You save money and don’t like to spend it carelessly on things they don’t need. You are reliable, responsible, patient and calm under pressure. Your strongest trait is your perseverance that comes very natural to you. You are punctual, plan ahead and stick with plans you make for yourself. Furthermore, you are very good at following through with things you have started no matter what obstacles may come your way.",
+  },
+  {
+    type: "I",
+    fullName: "Investigative",
+    careerDesc:
+      "You are intensely interested in knowing how and why things work, develop and change. You love to learn and acquire new skills and knowledge, which you use to find innovative solutions to difficult problems and also approaches that can be applied practically to your lives or work. Most probably you could be gifted with a talent to be a great writer or public speaker. You can become deeply affected by social causes and humanitarian issues, which you like to investigate and help resolve.",
+  },
+  {
+    type: "A",
+    fullName: "Artistic",
+    careerDesc:
+      "You are a person that always perceive life with an artistic perspective. You tend to be creative, impulsive, sensitive and possess a visionary style. You would love to have vibrant experiences in life and find pleasure in discovering the unknown. People with these characteristics seem to be more creative that is not limited to only paint and canvas. It could even mean implementing creativity to data and systems. You prefer to work independently rather than as part of a team. This is because you are not interested to work aligning to a set of rules.",
+  },
+  {
+    type: "S",
+    fullName: "Social",
+    careerDesc:
+      "You are good at good at making others happy, good at harmony, good at maintaining one sided relationship. You can be considered as a Jack of all trades rather than a master in something specific. You like working and living with lots of people and in a set structure. You cooperate well with others and is always considerate of other’s feelings or their needs while making decisions. You are less likely to behave selfishly.",
+  },
+  {
+    type: "E",
+    fullName: "Enterprising",
+    careerDesc:
+      "You have a natural predisposition to being entrepreneurial, being driven by their motivation and determination. You are hardworking and ambitious. You have an enterprising spirit with soft spot to have authority over people. You are able to express yourself openly and confidently and try to be as realistic as possible. Your self-confidence, courage and belief in human nature will help you to reach out to others when times get tough. You achieve to your goals in a different way than most people: in addition to using objectivity and impartiality, you use emotions and intuition when dealing with situations so as not to miss any opportunities that may arise.",
+  },
+  {
+    type: "C",
+    fullName: "Conventional",
+    careerDesc:
+      "You are thoughtful and idealistic and strive to have a positive impact on other people and the world around them. You rarely shy away from an opportunity to do the right thing, even when doing so is far from easy. Your passion and charisma will inspire others not just in their careers but in every arena of their lives, including their relationships. You like to be engaged in a variety of activities and tend not to focus on one particular area for too long.",
+  },
 ];
 
 const __filename = fileURLToPath(import.meta.url);
@@ -5043,25 +5509,38 @@ app.post("/register", async (req, res) => {
 
     const hash = await bcrypt.hash(password, saltRounds);
 
-    // Insert user into database using promisified query
-    await connection.query(
-      "INSERT INTO tbl_users(name, email, password) VALUES(?, ?, ?)",
-      [fullName, email, hash],
-      (err, result) => {
-        if (err) {
-          console.error("Error inserting user:", err);
-          return res.status(500).send("Error inserting user into database.");
+    connection.query(
+      "SELECT * FROM tbl_users WHERE email = ?",
+      [email],
+      (err, results) => {
+        if (results.length > 0) {
+          return res.status(400).json({ error: "Email already registered" });
         }
-        return res
-          .status(201)
-          .json({ message: "User registered successfully" });
+
+        connection.query(
+          "INSERT INTO tbl_users(name, email, password) VALUES(?, ?, ?)",
+          [fullName, email, hash],
+          (err2, result) => {
+            if (err2) {
+              console.error("Error inserting user:", err2);
+
+              return res
+                .status(500)
+                .json({ error: "Server error while inserting user" });
+            }
+
+            return res
+              .status(201)
+              .json({ message: "User registered successfully" });
+          }
+        );
       }
     );
   } catch (err) {
-    console.error("Error:", err);
-    res
+    console.error("Error hashing password:", err);
+    return res
       .status(500)
-      .send("An error occurred during password hashing or database operation.");
+      .json({ error: "Server error: " + (err.message || "Please try again") });
   }
 });
 
@@ -5123,9 +5602,9 @@ app.post("/login", async (req, res) => {
 
 app.post("/logout", async (req, res) => {
   res.clearCookie("authToken", {
-    httpOnly: true, // Ensures cookie is not accessible via JavaScript
+    httpOnly: true,
     secure: false,
-    path: "/", // Specifies the path for which cookie should be cleared
+    path: "/",
   });
 
   res.status(200).json({ success: "Successfully loggedout" });
@@ -5379,11 +5858,11 @@ app.get("/calculateCareerScore", authMiddleware, (req, res) => {
     const percentage = Math.round((totalScore / (typeCounts * 5)) * 100);
     return {
       totalScore: totalScore,
-      desc: generateDescription(percentage, type),
+      //desc: generateDescription(percentage, type),
     };
   }
 
-  function generateDescription(percentage, type) {
+  /*function generateDescription(percentage, type) {
     let description = "";
     let templatePath = "";
     switch (type) {
@@ -5591,7 +6070,7 @@ app.get("/calculateCareerScore", authMiddleware, (req, res) => {
         description = "Invalid";
     }
     return description;
-  }
+  }*/
 
   const scores = [
     { type: "R", score: realisticScore },
@@ -5608,7 +6087,12 @@ app.get("/calculateCareerScore", authMiddleware, (req, res) => {
   console.log("newSortedScores", newSortedScores);
 
   const topThreeTypes = newSortedScores.slice(0, 3);
-  console.log(topThreeTypes);
+  console.log("topThreeTypes:", topThreeTypes);
+
+  const match = careerDescriptions.filter((item) =>
+    topThreeTypes.map((t) => t.type).includes(item.type)
+  );
+  console.log("match:", match);
 
   const topThreeCombination = topThreeTypes.map((item) => item.type).join("");
   console.log(topThreeCombination);
@@ -5629,8 +6113,8 @@ app.get("/calculateCareerScore", authMiddleware, (req, res) => {
 
   console.log(fullName);
 
-  const match = careerMapping.find(
-    (item) => item.combination === topThreeCombination
+  const primaryCareerMatch = careerMapping.find(
+    (item) => item.type === topThreeTypes[0].type
   );
 
   /* function generatePdf(percentageAll, match) {
@@ -5653,73 +6137,21 @@ app.get("/calculateCareerScore", authMiddleware, (req, res) => {
     doc
       .fontSize(10)
       .text(
-        `Your career profile suggests a strong inclination toward the field of ${match.fieldOfStudy} including areas like ${match.career}.`,
+        `Based on your assessment, you are {match[0].fullName}, {match[1].fullName}, {match[2].fullName}.`,
         { lineGap: 6 }
       );
-    doc.moveDown();
-    doc.fontSize(10).text(`${match.careerDesc} `, { lineGap: 6 });
-    doc.moveDown();
-    doc.fillColor("#F54927").fontSize(12).text(`Action Plan`);
-    doc.moveDown();
-    doc
-      .fillColor("#000000")
-      .fontSize(10)
-      .text(`${match.actionPlan}`, { lineGap: 6 });
-    doc.moveDown();
-    doc.fillColor("#004700").fontSize(12).text(`Strength`);
-    doc.moveDown();
-    doc
-      .fillColor("#000000")
-      .fontSize(10)
-      .text(`${match.strengths}`, { lineGap: 6 });
-    doc.moveDown();
-    doc.fillColor("#A31B00").fontSize(12).text(`Weaknesses`);
-    doc.moveDown();
-    doc
-      .fillColor("#000000")
-      .fontSize(10)
-      .text(`${match.weaknesses}`, { lineGap: 6 });
-    doc.moveDown();
-    doc.fillColor("#A31B00").fontSize(12).text(`Todays Relevance`);
-    doc.moveDown();
-    doc
-      .fillColor("#000000")
-      .fontSize(10)
-      .text(`${match.todayRelevance}`, { lineGap: 6 });
-    doc.moveDown();
-    doc.fillColor("#A31B00").fontSize(12).text(`Future Relevance`);
-    doc.moveDown();
-    doc
-      .fillColor("#000000")
-      .fontSize(10)
-      .text(`${match.futureRelevance}`, { lineGap: 6 });
-    doc.moveDown();
-
-    Object.keys(percentageAll).forEach((key) => {
-      const type = percentageAll[key];
-      console.log(type);
-      doc
-        .fillColor("#000000")
-        .fontSize(12)
-        .text(`${key.charAt(0).toUpperCase() + key.slice(1)} Trait`, {
-          underline: true,
-        });
-      doc.fontSize(10).text(`Score: ${type.percentage}%`, { lineGap: 4 });
-
-      // Convert HTML description to text while preserving basic formatting
-      const htmlText = htmlToText(
-        generateDescription(type.percentage, type.type)
-      );
-
-      doc.fontSize(10).text(htmlText, { lineGap: 6 });
-      doc.moveDown();
-    });
 
     doc.end();
-    return filePath;
+    writeStream.on("finish", function () {
+      callback(null, filePath);
+    });
+
+    writeStream.on("error", function (err) {
+      callback(err, null);
+    });
   }*/
 
-  if (match) {
+  if (match && primaryCareerMatch) {
     const percentageAll = {
       realistic: {
         percentage: Math.round(
@@ -5759,44 +6191,46 @@ app.get("/calculateCareerScore", authMiddleware, (req, res) => {
       },
     };
     //const pdf = generatePdf(percentageAll, match);
-
+    console.log("match", match);
+    console.log("percentageAll", percentageAll);
     return res.json({
       bestCareer: {
         realistic: {
           percentage: percentageAll.realistic.percentage,
-          description: realisticScore.desc,
+          //description: realisticScore.desc,
         },
         investigative: {
           percentage: percentageAll.investigative.percentage,
-          description: investigateScore.desc,
+          //description: investigateScore.desc,
         },
         artistic: {
           percentage: percentageAll.artistic.percentage,
-          description: artisticScore.desc,
+          //description: artisticScore.desc,
         },
         social: {
           percentage: percentageAll.social.percentage,
-          description: socialScore.desc,
+          // description: socialScore.desc,
         },
 
         enterprising: {
           percentage: percentageAll.enterprising.percentage,
-          description: enterprisingScore.desc,
+          //description: enterprisingScore.desc,
         },
         conventional: {
           percentage: percentageAll.conventional.percentage,
-          description: conventionalScore.desc,
+          //description: conventionalScore.desc,
         },
 
         fullName: fullName,
-        fieldOfStudy: match.fieldOfStudy,
-        career: match.career,
-        careerDesc: match.careerDesc,
-        actionPlan: match.actionPlan,
-        todayRelevance: match.todayRelevance,
-        futureRelevance: match.futureRelevance,
-        strength: match.strengths,
-        weaknesses: match.weaknesses,
+        //fieldOfStudy: match.fieldOfStudy,
+        //career: match.career,
+        matchedCareers: match,
+        primaryCareerMatch: primaryCareerMatch,
+        //actionPlan: match.actionPlan,
+        //todayRelevance: match.todayRelevance,
+        //futureRelevance: match.futureRelevance,
+        //strength: match.strengths,
+        //weaknesses: match.weaknesses,
       },
     });
   }
@@ -6277,14 +6711,23 @@ app.get("/calculateScore", (req, res) => {
     let templatePath = "";
     switch (trait) {
       case "openness":
-        if (percentage >= 80) {
+        if (percentage >= 50) {
+          description =
+            "You are more likely to have a high intelligence. You tend to be more curious and imaginative. You like complexity and can handle situations that require imagination. You are open to emotion, sensitive to beauty and willing to try new things. You would perform better in academic settings; this is because you are more creative and curious about problems.";
+        } else {
+          description =
+            "You prefer familiar routines and surroundings, where you do well in because you are comfortable with them. You may find it difficult to solve abstract problems, especially those that are challenging and involve a lot of reasoning. You may feel less enthusiastic about learning new things, such as doing research or trying out novel activities.";
+        }
+
+        /*if (percentage >= 80) {
           templatePath = path.join(
             __dirname,
             "personality-descriptions/openness-80.html"
           );
           description = fs.readFileSync(templatePath, "utf8");
           //description = `A score above 80 signifies a strong preference for intellectual exploration, creative thinking, and a willingness to embrace novel ideas and unconventional experiences. You are drawn to abstract concepts, aesthetics, and new challenges, and likely thrive in environments that reward curiosity and innovation.You may excel in careers that involve creativity, innovation, and intellectual exploration, such as UX/UI design, research, architecture, or roles in the arts and creative consulting.`;
-        } else if (percentage >= 60) {
+        }
+         else if (percentage >= 60) {
           templatePath = path.join(
             __dirname,
             "personality-descriptions/openness-60.html"
@@ -6308,11 +6751,18 @@ app.get("/calculateScore", (req, res) => {
             "personality-descriptions/openness-10.html"
           );
           description = fs.readFileSync(templatePath, "utf8");
-        }
+        }*/
 
         break;
       case "conscientiousness":
-        if (percentage >= 80) {
+        if (percentage >= 50) {
+          description =
+            "You always like to finish work on time, even if this means working late. This is because you have a strong sense of responsibility and feel as if it's your duty to complete work in a given period. Also, you might not take lunch breaks or a lot of sick days. You feel as if everything should be done in a specific order and that there is no point in doing anything out of sequence. You believe it's your duty to help those around you. You may often go beyond what is required so that you can make sure that other people are safe and happy. This quality can also make you a good leader, since you are able to push your team towards what is right.";
+        } else {
+          description =
+            'You strive harder to achieve your goals. You are more spontaneous and fun loving.  You are known as "doer" because you prefer doing over reflecting. While this is good for getting stuff done, it could cause to act on impulse or out of restlessness. Stress can cause your performance to drop considerably. You are less able to control impulses and are more apt to seek stimulation. You are more likely to be disorganized, negligent, and prone to having addiction problems.';
+        }
+        /*if (percentage >= 80) {
           templatePath = path.join(
             __dirname,
             "personality-descriptions/c-80.html"
@@ -6342,10 +6792,18 @@ app.get("/calculateScore", (req, res) => {
             "personality-descriptions/c-10.html"
           );
           description = fs.readFileSync(templatePath, "utf8");
-        }
+        }*/
         break;
       case "extraversion":
-        if (percentage >= 80) {
+        if (percentage >= 50) {
+          description =
+            'You are more sociable and enjoy social settings. You make friends easily, express yourself freely in groups, and enjoy conversing with large groups of people. You are inclined to initiate contacts with others, rather than waiting to be approached. You tend to be energized and "revved up" by social interaction, and less so by spending time alone or in quiet reflection. You like working with people more than working alone; You get energized being around other people. You are fun-loving, action-oriented individuals who are risk takers and are willing to try just about anything at least once. You have an optimistic outlook on life';
+        } else {
+          description =
+            "You are usually shy, reserved, quiet, and introverted. However, you are more likely to be put under stress due to your perceived external overstimulation or social demands. This can cause you to feel uncomfortable in public situations and long for the comfort and tranquility of your private homes and family. You often feel that you do not have enough time to take care of daily tasks. You prefer solitary work and enjoy spending  free time alone as well. You tend to be more passive than active, and follow the leads set by others rather than setting it yourself.";
+        }
+
+        /*if (percentage >= 80) {
           templatePath = path.join(
             __dirname,
             "personality-descriptions/e-80.html"
@@ -6375,10 +6833,17 @@ app.get("/calculateScore", (req, res) => {
             "personality-descriptions/e-10.html"
           );
           description = fs.readFileSync(templatePath, "utf8");
-        }
+        }*/
         break;
       case "agreeableness":
-        if (percentage >= 80) {
+        if (percentage >= 50) {
+          description =
+            "You tend to avoid situations that might cause conflict or negative feelings with others. You also try hard to avoid saying anything that might offend someone else, which sometimes results in them holding back your true thoughts and feelings. You might keep their unrefined opinions and behaviours to themselves, which can have a negative impact on your relationships. In the workplace, you might do more harm than good if you fail to speak up about important issues or problems that needs to be addressed.";
+        } else {
+          description =
+            "Your personality reflect the independent pursuit of personal goals. You are willing to say no and take risk causing trouble if it gets you what you want. You might seem to be less concerned with how their behavior affects others. You might say or do things that are likely to upset people without worrying about the consequences of doing so, which can result in more open and honest discussions and greater group cohesion in some cases. You would have a tough time influencing others and their careers will suffer as a result";
+        }
+        /*if (percentage >= 80) {
           templatePath = path.join(
             __dirname,
             "personality-descriptions/a-80.html"
@@ -6405,10 +6870,18 @@ app.get("/calculateScore", (req, res) => {
         } else {
           templatePath = path.join(__dirname, "career-descriptions/a-10.html");
           description = fs.readFileSync(templatePath, "utf8");
-        }
+        }*/
         break;
       case "neuroticism":
-        if (percentage >= 80) {
+        if (percentage >= 50) {
+          description =
+            "You tend to be moody and worry a lot over minor things. You may perceive ordinary situations as threatening and minor frustrations as difficult. You might become angry very quickly and be upset at the slightest provocation. It's not a good idea for you to work in high-stress jobs because you might become stressed easily and find it difficult to cope with the pressure. Studies have shown that neuroticism is linked to a strong heart, so you might live longer than those who don't feel as much stress.";
+        } else {
+          description =
+            "You display positive emotions such as happiness often and tend not to show emotions such as anger";
+        }
+
+        /*if (percentage >= 80) {
           templatePath = path.join(
             __dirname,
             "personality-descriptions/n-80.html"
@@ -6438,7 +6911,7 @@ app.get("/calculateScore", (req, res) => {
             "personality-descriptions/n-10.html"
           );
           description = fs.readFileSync(templatePath, "utf8");
-        }
+        }*/
         break;
       default:
         description = "Invalid";
