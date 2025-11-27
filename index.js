@@ -5420,6 +5420,9 @@ env.config();
 
 const jwtSecretKey = process.env.JWT_SECRET_KEY;
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+const stripe_price_id = process.env.STRIPE_PRICE_ID;
+const stripe_coupon_id = process.env.STRIPE_COUPON_ID;
+const stripe_event_id = process.env.STRIPE_EVENT_ID;
 
 const saltRounds = 10;
 
@@ -7054,16 +7057,23 @@ app.post("/checkout", authMiddleware, async (req, res) => {
           success_url: `http://localhost:5173/success`,
           line_items: [
             {
-              price_data: {
-                currency: "cad",
-                product_data: { name: "Career Assessment" },
-                unit_amount: 999,
-              },
+              price: stripe_price_id,
               quantity: 1,
             },
           ],
           mode: "payment",
           customer_email: email,
+          discounts: [
+            {
+              coupon: stripe_coupon_id,
+            },
+          ],
+
+          // Attach the event ID as metadata to the Checkout Session
+          metadata: {
+            event_id: stripe_event_id,
+            // You can add other relevant metadata here
+          },
         });
 
         console.log(session);
