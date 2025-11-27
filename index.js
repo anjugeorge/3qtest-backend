@@ -11,19 +11,9 @@ import mysql from "mysql";
 import jwt from "jsonwebtoken";
 import Stripe from "stripe";
 import cookieParser from "cookie-parser";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
-import { type } from "os";
-import { htmlToText } from "html-to-text";
+
 import multer from "multer";
-import { title } from "process";
+import nocache from "nocache";
 
 export const Questions = [
   {
@@ -5451,6 +5441,7 @@ app.use(
 
 app.use(express.json({ limit: "50mb" }));
 app.use(cookieParser());
+app.use(nocache());
 
 const authMiddleware = (req, res, next) => {
   const token = req.cookies.authToken;
