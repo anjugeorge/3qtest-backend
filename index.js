@@ -5396,7 +5396,6 @@ export const careerDescriptions = [
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-// Create the 'pdfs' folder if it doesn't exist
 
 const pdfFolder = path.join(__dirname, "pdfs");
 if (!fs.existsSync(pdfFolder)) {
@@ -5404,7 +5403,7 @@ if (!fs.existsSync(pdfFolder)) {
 }
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads/"); // make sure this folder exists
+    cb(null, "uploads/");
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + "_" + file.originalname);
@@ -5437,8 +5436,8 @@ const SMTPUser = process.env.SMTP_USER;
 const SMTPPass = process.env.SMTP_PASS;
 app.use(
   cors({
-    origin: "http://localhost:5173", // your frontend URL
-    credentials: true, // allow cookies and credentials
+    origin: "http://localhost:5173",
+    credentials: true,
   })
 );
 
@@ -6995,14 +6994,35 @@ app.post(
     const mailOptions = {
       from: SMTPUser,
       to: email,
-      subject: "3QTest - Career Assessment Result",
-      text: `Hi ${userName},\n\nPlease find your career assessment test report attached.`,
+      subject: "Your 3QTest Career Assessment Report",
+      html: `
+    <p style="font-size:14px; line-height:1.8; ">
+      Hi ${userName},
+    </p>
+
+    <p style="font-size:14px; line-height:1.8;">
+      Thank you for completing your Career Assessment Test!
+    </p>
+
+    <p style="font-size:14px; line-height:1.8;">
+      Attached is your personalized career report, crafted to help you better understand your strengths, interests, and potential career paths. We hope this report provides valuable insights and guidance as you explore opportunities that best match your unique profile.
+    </p>
+
+    <p style="font-size:14px; line-height:1.8;">
+      Wishing you all the best in your career journey!
+    </p>
+
+    <p style="font-size:14px; line-height:1.8;">
+      Warm regards,<br>The 3QTests by APSS Team
+    </p>
+  `,
       attachments: [
         {
           path: pdfPath,
         },
       ],
     };
+
     console.log("mailOptions", mailOptions);
 
     transporter.sendMail(mailOptions, (error, info) => {
@@ -7069,10 +7089,8 @@ app.post("/checkout", authMiddleware, async (req, res) => {
             },
           ],
 
-          // Attach the event ID as metadata to the Checkout Session
           metadata: {
             event_id: stripe_event_id,
-            // You can add other relevant metadata here
           },
         });
 
