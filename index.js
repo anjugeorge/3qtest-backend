@@ -1790,7 +1790,7 @@ app.post(
     const userName = req.user.name;
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
-      port: 465, // secure port
+      port: 587,
       secure: true,
       auth: {
         user: SMTPUser,
