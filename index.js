@@ -11,7 +11,7 @@ import mysql from "mysql";
 import jwt from "jsonwebtoken";
 import Stripe from "stripe";
 import cookieParser from "cookie-parser";
-
+import crypto from "crypto";
 import multer from "multer";
 import nocache from "nocache";
 
@@ -1075,8 +1075,11 @@ app.get("/", (req, res) => {
 
 app.post("/register", async (req, res) => {
   try {
-    const { fullName, email, password } = req.body;
+    const { fullName, email, password, confirmPassword } = req.body;
     console.log(req.body);
+    if (password !== confirmPassword) {
+      return res.status(400).json({ error: "Passwords do not match" });
+    }
 
     const hash = await bcrypt.hash(password, saltRounds);
 
@@ -1181,23 +1184,147 @@ app.post("/logout", async (req, res) => {
   res.status(200).json({ success: "Successfully loggedout" });
 });
 
-app.post("/forgotPassword", async (req, res) => {
+app.post("/forgotPassword", (req, res) => {
+  const email = req.body.email;
+  // const userName = req.user.name;
+  const resetToken = crypto.randomBytes(32).toString("hex");
+  const hashedToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+  connection.query(
+    "SELECT * FROM tbl_users WHERE email = ?",
+    [email],
+    (err, users) => {
+      if (users.length === 0) {
+        return res.status(404).send("User not found");
+      }
+
+      const user = users[0];
+    }
+  );
+  connection.query(
+    `UPDATE tbl_users 
+             SET reset_Token = ?, 
+                reset_token_expiry = ?
+                
+             WHERE email = ?`,
+    [hashedToken, new Date(Date.now() + 900000), email]
+  );
+  const resetLink = `http://localhost:5173/resetPassword?resetToken=${resetToken}`;
+
+  const transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+    auth: {
+      user: SMTPUser,
+      pass: SMTPPass,
+    },
+  });
+
+  const mailOptions = {
+    from: SMTPUser,
+    to: email,
+    subject: "Your 3QTest Career Assessment Report",
+    html: `
+    <p style="font-size:14px; line-height:1.8; ">
+      Hi ,
+    </p>
+
+    <p style="font-size:14px; line-height:1.8;">
+      We received a request to reset your password.
+    </p>
+
+    <p style="font-size:14px; line-height:1.8;">
+     Click the link below to create a new password:
+    </p>
+${resetLink}
+    <p style="font-size:14px; line-height:1.8;">
+      Wishing you all the best in your career journey!
+    </p>
+
+
+
+    <p style="font-size:14px; line-height:1.8;">
+      Warm regards,<br>The 3QTests by APSS Team
+    </p>
+  `,
+  };
+
+  console.log("mailOptions", mailOptions);
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) return res.status(500).json({ error: error.message });
+  });
+});
+
+app.post("/resetPassword", async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { token, newPassword } = req.body; // Changed from 'password' to 'newPassword'
 
-    const hash = await bcrypt.hash(password, saltRounds);
+    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
 
-    await connection.query("UPDATE tbl_users SET password= ? WHERE email = ?", [
-      hash,
-      email,
-    ]);
+    connection.query(
+      `SELECT * FROM tbl_users 
+       WHERE reset_Token = ? 
+       AND reset_token_expiry > NOW()`,
+      [hashedToken],
+      async (err, users) => {
+        // Check for database error
+        if (err) {
+          console.error("Database error:", err);
+          return res.status(500).json({ error: "Database error" });
+        }
 
-    return res.status(201).json({ message: "User registered successfully" });
+        // Check if token is valid
+        if (users.length === 0) {
+          return res.status(400).json({
+            error: "Invalid or expired reset token",
+          });
+        }
+
+        const user = users[0];
+
+        try {
+          // Hash the new password
+          const saltRounds = 10;
+          const hash = await bcrypt.hash(newPassword, saltRounds); // Use newPassword here
+
+          // Update password and clear token
+          connection.query(
+            `UPDATE tbl_users 
+             SET password = ?, 
+                 reset_Token = NULL, 
+                 reset_token_expiry = NULL 
+             WHERE id = ?`,
+            [hash, user.id],
+            (updateErr, result) => {
+              if (updateErr) {
+                console.error("Update error:", updateErr);
+                return res
+                  .status(500)
+                  .json({ error: "Failed to update password" });
+              }
+
+              return res.status(200).json({
+                message: "Password reset successful",
+              });
+            }
+          );
+        } catch (hashErr) {
+          console.error("Hashing error:", hashErr);
+          return res.status(500).json({
+            error: "Failed to hash password",
+          });
+        }
+      }
+    );
   } catch (err) {
     console.error("Error:", err);
-    res
-      .status(500)
-      .send("An error occurred during password hashing or database operation.");
+    res.status(500).json({
+      error: "An error occurred during password reset",
+    });
   }
 });
 
