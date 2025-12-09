@@ -959,7 +959,7 @@ app.post(
   "/webhook",
   express.raw({ type: "application/json" }),
   (request, response) => {
-    let event = request.body;
+    let event;
 
     if (endpointSecret) {
       const signature = request.headers["stripe-signature"];
@@ -971,10 +971,14 @@ app.post(
         );
       } catch (err) {
         console.log(`⚠️  Webhook signature verification failed.`, err.message);
-        return response.sendStatus(400);
+        return response.status(400).send(`Webhook Error: ${err.message}`);
       }
     }
 
+    // Send 200 response IMMEDIATELY to acknowledge receipt
+    response.status(200).end();
+
+    // Process event AFTER responding
     switch (event.type) {
       case "checkout.session.completed":
         const session = event.data.object;
@@ -984,7 +988,7 @@ app.post(
           const userId = session.metadata.user_id;
           const sessionId = session.id;
           const amountPaid = session.amount_total / 100;
-
+          console.log("METADATA:", session.metadata);
           connection.query(
             `UPDATE tbl_users 
              SET is_paid = 1, 
@@ -1006,12 +1010,10 @@ app.post(
       default:
         console.log(`Unhandled event type ${event.type}.`);
     }
-
-    response.json({ received: true });
   }
 );
 
-app.listen(4242, () => console.log("Running on port 4242"));
+//app.listen(4242, () => console.log("Running on port 4242"));
 app.use(
   cors({
     origin: "http://localhost:5173",
@@ -2017,7 +2019,7 @@ app.post("/checkout", authMiddleware, async (req, res) => {
       try {
         const session = await stripe.checkout.sessions.create({
           success_url: `http://localhost:5173/success?session_id={CHECKOUT_SESSION_ID}`,
-          //cancel_url: `https://3qtests.com/cancel`,
+          cancel_url: `http://localhost:5173/`,
           line_items: [
             {
               price: stripe_price_id,
@@ -2039,6 +2041,12 @@ app.post("/checkout", authMiddleware, async (req, res) => {
           metadata: {
             user_id: userId.toString(),
             event_id: stripe_event_id,
+          },
+          custom_text: {
+            submit: {
+              message:
+                "⚠️ Important: Keep this window open during payment processing",
+            },
           },
         });
 
